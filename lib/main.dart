@@ -15,15 +15,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-  final premierId = 39;
-  final String prem = 'PREMIER LEAGUE';
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final Map<String, int> leagueMap = {
+    'Premier League': 39,
+    'La Liga': 140,
+    'Bundesliga': 78,
+    'Superleague 1': 197,
+    // Add more leagues here
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF333333), // Dark mode background color
+      backgroundColor: const Color(0xFF333333),
       body: Align(
         alignment: Alignment.topCenter,
         child: Padding(
@@ -38,65 +49,43 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.0),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GreekStandingsPage()),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 20.0), // Side padding
-                  padding: EdgeInsets.all(20.0), // Top padding
-                  decoration: BoxDecoration(
-                    color: Colors.white, // Background color of the button
-                    borderRadius: BorderRadius.circular(20.0), // Smooth corners
-                  ),
-                  child: Center(
-                    child: Text(
-                      'SUPERLEAGUE',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        color: Colors.blue, // Text color
+              Column(
+                children: [
+                  for (final leagueEntry in leagueMap.entries)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Standings(
+                                leagueId: leagueEntry.value,
+                                champName: leagueEntry.key,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(20.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              leagueEntry.key,
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Standings(
-                              leagueId: premierId,
-                              champName: prem,
-                            )),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 20.0), // Side padding
-                  padding: EdgeInsets.all(20.0), // Top padding
-                  decoration: BoxDecoration(
-                    color: Colors.white, // Background color of the button
-                    borderRadius: BorderRadius.circular(20.0), // Smooth corners
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${prem}',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        color: Colors.blue, // Text color
-                      ),
-                    ),
-                  ),
-                ),
+                ],
               ),
             ],
           ),
