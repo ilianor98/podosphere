@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podosphere/greek_standings.dart';
+import 'package:podosphere/standings.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +17,8 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+  final premierId = 37;
+  final String prem = 'PREMIER LEAGUE';
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +42,14 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GreekStandingsPage()),
+                    MaterialPageRoute(
+                        builder: (context) => GreekStandingsPage()),
                   );
                 },
                 child: Container(
                   width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 20.0), // Side padding
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.0), // Side padding
                   padding: EdgeInsets.all(20.0), // Top padding
                   decoration: BoxDecoration(
                     color: Colors.white, // Background color of the button
@@ -61,6 +66,38 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 16.0),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Standings(
+                              leagueId: premierId,
+                              champName: prem,
+                            )),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.0), // Side padding
+                  padding: EdgeInsets.all(20.0), // Top padding
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Background color of the button
+                    borderRadius: BorderRadius.circular(20.0), // Smooth corners
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${prem}',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Colors.blue, // Text color
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -68,6 +105,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-
-
