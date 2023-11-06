@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-  final premierId = 37;
+  final premierId = 39;
   final String prem = 'PREMIER LEAGUE';
 
   @override
