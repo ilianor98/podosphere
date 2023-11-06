@@ -69,8 +69,8 @@ final List<LeagueInfo> leagueList = [
   ),
   LeagueInfo(
     name: 'Serie A',
-    logo: 'https://media-4.api-sports.io/football/leagues/71.png',
-    id: 71,
+    logo: 'https://media-4.api-sports.io/football/leagues/135.png',
+    id: 135,
     flag: 'https://media-4.api-sports.io/flags/it.svg',
   ),
   LeagueInfo(
