@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class TeamDetailsPage extends StatefulWidget {
   final int teamId;
 
-  TeamDetailsPage({required this.teamId});
+  const TeamDetailsPage({super.key, required this.teamId});
 
   @override
   _TeamDetailsPageState createState() => _TeamDetailsPageState();
@@ -70,125 +70,159 @@ class _TeamDetailsPageState extends State<TeamDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF333333),
-        title: Text('Team Details', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-      ),
-      body: Container(
-        color: const Color(0xFF333333),
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Center(
-              child: DataTable(
-                dataRowMinHeight: 75,
-                dataRowMaxHeight: 75,
-                columns: [
-                  DataColumn(
-                    label:
-                        Text('Home Team', style: TextStyle(color: Colors.white)),
-                  ),
-                  DataColumn(
-                    label: Text('Score', style: TextStyle(color: Colors.white)),
-                  ),
-                  DataColumn(
-                    label:
-                        Text('Away Team', style: TextStyle(color: Colors.white)),
-                  ),
-                ],
-                rows: matches.map((matchData) {
-                  final homeTeam = matchData['teams']['home'];
-                  final awayTeam = matchData['teams']['away'];
-                  final homeTeamLogo = homeTeam['logo'];
-                  final awayTeamLogo = awayTeam['logo'];
-                  final homeTeamName = homeTeam['name'];
-                  final awayTeamName = awayTeam['name'];
-                  final score = matchData['score']['fulltime'];
-                  final matchDate = parseDate(matchData['fixture']['date']);
-                  final matchType = matchData['league']['name'];
-            
-                  return DataRow(
-                    cells: [
-                      DataCell(
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.network(homeTeamLogo, width: 40, height: 40),
-                              Text(
-                                homeTeamName,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      DataCell(
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              if (score['home'] != null)
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: const Color(0xFF333333),
+      title: const Text('Game History', style: TextStyle(color: Colors.white)),
+      centerTitle: true,
+    ),
+    body: Container(
+      color: const Color(0xFF333333),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Row(
+            children: [
+              Expanded(
+                child: DataTable(
+                  dataRowMinHeight: 75,
+                  dataRowMaxHeight: 75,
+                  columnSpacing: 12,
+                  columns: const [
+                    DataColumn(
+                      label: Text('Home Team', style: TextStyle(color: Colors.white)),
+                      numeric: false,
+                    ),
+                  ],
+                  rows: matches.map((matchData) {
+                    final homeTeam = matchData['teams']['home'];
+                    final homeTeamLogo = homeTeam['logo'];
+                    final homeTeamName = homeTeam['name'];
+
+                    return DataRow(
+                      cells: [
+                        DataCell(
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.network(homeTeamLogo, width: 40, height: 40),
                                 Text(
-                                  '${score['home']}-${score['away']}',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                )
-                              else
-                                Text(
-                                  matchDate,
-                                  style:
-                                      TextStyle(color: Colors.grey, fontSize: 25),
+                                  homeTeamName,
+                                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                                  textAlign: TextAlign.center,
                                 ),
-                                if (score['home'] != null)
-                                Text(
-                                matchDate,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                              )
-                              else
-                                const Text(
-                                  ' ',
-                                  style:
-                                      TextStyle(color: Colors.grey, fontSize: 25),
-                                ),
-                              
-                              Text(
-                                matchType,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 10),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      DataCell(
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.network(awayTeamLogo, width: 40, height: 40),
-                              Text(
-                                awayTeamName,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }).toList(),
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
-            )),
+              Expanded(
+                child: DataTable(
+                  dataRowMinHeight: 75,
+                  dataRowMaxHeight: 75,
+                  columnSpacing: 12,
+                  columns: const [
+                    DataColumn(
+                      label: Text('Score', style: TextStyle(color: Colors.white)),
+                      numeric: false,
+                    ),
+                  ],
+                  rows: matches.map((matchData) {
+                    final score = matchData['score']['fulltime'];
+                    final matchDate = parseDate(matchData['fixture']['date']);
+                    final matchType = matchData['league']['name'];
+
+                    return DataRow(
+                      cells: [
+                        DataCell(
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                if (score['home'] != null)
+                                  Text(
+                                    '${score['home']}-${score['away']}',
+                                    style: const TextStyle(color: Colors.white, fontSize: 25),
+                                  )
+                                else
+                                  Text(
+                                    matchDate,
+                                    style: const TextStyle(color: Colors.grey, fontSize: 25),
+                                  ),
+                                if (score['home'] != null)
+                                  Text(
+                                    matchDate,
+                                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                                  )
+                                else
+                                  const Text(
+                                    ' ',
+                                    style: TextStyle(color: Colors.grey, fontSize: 25),
+                                  ),
+                                Text(
+                                  matchType,
+                                  style: const TextStyle(color: Colors.grey, fontSize: 10),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+              Expanded(
+                child: DataTable(
+                  dataRowMinHeight: 75,
+                  dataRowMaxHeight: 75,
+                  columnSpacing: 12,
+                  columns: const [
+                    DataColumn(
+                      label: Text('Away Team', style: TextStyle(color: Colors.white)),
+                      numeric: false,
+                    ),
+                  ],
+                  rows: matches.map((matchData) {
+                    final awayTeam = matchData['teams']['away'];
+                    final awayTeamLogo = awayTeam['logo'];
+                    final awayTeamName = awayTeam['name'];
+
+                    return DataRow(
+                      cells: [
+                        DataCell(
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.network(awayTeamLogo, width: 40, height: 40),
+                                Text(
+                                  awayTeamName,
+                                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
