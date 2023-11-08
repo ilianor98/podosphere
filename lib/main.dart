@@ -132,6 +132,8 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => LeagueOptions(
                                   leagueId: leagueInfo.id,
                                   leagueName: leagueInfo.name,
+                                  logo: leagueInfo.logo,
+                                  flag: leagueInfo.flag,
                                 ),
                               ),
                             );
