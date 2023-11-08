@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:podosphere/greek_standings.dart';
-import 'package:podosphere/standings.dart';
+import 'package:podosphere/league_options.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
@@ -130,9 +129,9 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Standings(
+                                builder: (context) => LeagueOptions(
                                   leagueId: leagueInfo.id,
-                                  champName: leagueInfo.name,
+                                  leagueName: leagueInfo.name,
                                 ),
                               ),
                             );
