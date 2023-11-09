@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:podosphere/standings.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:podosphere/team_profile.dart';
 
 class LeagueOptions extends StatelessWidget {
   final int leagueId;
@@ -14,6 +15,7 @@ class LeagueOptions extends StatelessWidget {
       required this.logo,
       required this.flag});
 
+  final int testId = 617;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +101,34 @@ class LeagueOptions extends StatelessWidget {
               },
               child: Center(
                 child: Text('League History',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 24,
+                    )),
+              ),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TeamProfile(
+                      teamId: testId,
+                    ),
+                  ),
+                );
+              },
+              child: Center(
+                child: Text('Test Profile',
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 24,
