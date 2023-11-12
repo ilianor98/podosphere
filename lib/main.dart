@@ -79,7 +79,7 @@ final List<LeagueInfo> leagueList = [
     flag: 'https://media-4.api-sports.io/flags/nl.svg',
   ),
   LeagueInfo(
-    name: 'Jupiler Pro League',
+    name: 'Jupiler Pro',
     logo: 'https://media-4.api-sports.io/football/leagues/144.png',
     id: 144,
     flag: 'https://media-4.api-sports.io/flags/be.svg',
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
     'Ligue 1': 61,
     'Serie A': 71,
     'Eredivisie': 88,
-    'Jupiler Pro League': 144,
+    'Jupiler Pro': 144,
     // Add more leagues here
   };
 
@@ -104,20 +104,22 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF333333),
+      appBar: AppBar(
+        title: const Text(
+          'PODOSPHERE',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal),
+        ),
+        backgroundColor: const Color(0xFF333333),
+        centerTitle: true,
+      ),
       body: Align(
         alignment: Alignment.topCenter,
         child: Padding(
-          padding: const EdgeInsets.only(top: 100.0),
+          padding: const EdgeInsets.only(top: 0.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                  'PODOSPHERE',
-                  style: TextStyle(
-                    fontSize: 32.0,
-                    color: Colors.white,
-                  ),
-                ),
                 SizedBox(height: 16.0),
                 Column(
                   children: [
@@ -138,41 +140,42 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           },
-                          child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(20.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.network(
-                                  leagueInfo.logo,
-                                  width: 50, // Adjust the width as needed
-                                  height: 50, // Adjust the height as needed
-                                ),
-                                SizedBox(
-                                  width: 16.0,
-                                ),
-                                Text(
-                                  leagueInfo.name,
-                                  style: TextStyle(
-                                    fontSize: 24.0,
-                                    color: Colors.blue,
+                          child: FractionallySizedBox(
+                            widthFactor: 0.9,
+                            child: Container(
+                              padding: EdgeInsets.all(20.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Image.network(
+                                    leagueInfo.logo,
+                                    width: 50, // Adjust the width as needed
+                                    height: 50, // Adjust the height as needed
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 16.0,
-                                ),
-                                SvgPicture.network(
-                                  leagueInfo.flag,
-                                  width: 50, // Adjust the width as needed
-                                  height: 50, // Adjust the height as needed
-                                ),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment
-                                  .spaceBetween, // Align items to the beginning and end of the row
+                                  SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Text(
+                                    leagueInfo.name,
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  SvgPicture.network(
+                                    leagueInfo.flag,
+                                    width: 50, // Adjust the width as needed
+                                    height: 50, // Adjust the height as needed
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

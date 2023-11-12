@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:podosphere/league_history.dart';
+import 'package:podosphere/league_teams.dart';
 import 'package:podosphere/standings.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:podosphere/team_profile.dart';
+
 
 class LeagueOptions extends StatelessWidget {
   final int leagueId;
@@ -15,7 +17,7 @@ class LeagueOptions extends StatelessWidget {
       required this.logo,
       required this.flag});
 
-  final int testId = 617;
+  final int currentSeason = 2023;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +75,7 @@ class LeagueOptions extends StatelessWidget {
                     builder: (context) => Standings(
                       leagueId: leagueId,
                       champName: leagueName,
+                      season: currentSeason,
                     ),
                   ),
                 );
@@ -96,7 +99,17 @@ class LeagueOptions extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                // Handle the "League History" option
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LeagueHistory(
+                      leagueId: leagueId,
+                      leagueName: leagueName,
+                      logo: logo,
+                      flag: flag,
+                    ),
+                  ),
+                );
                 // You can navigate to a page that lists older seasons for the selected league here
               },
               child: Center(
@@ -121,14 +134,17 @@ class LeagueOptions extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TeamProfile(
-                      teamId: testId,
+                    builder: (context) => LeagueTeams(
+                      leagueId: leagueId,
+                      champName: leagueName,
+                      season: currentSeason,
                     ),
                   ),
                 );
+                // You can navigate to a page that lists older seasons for the selected league here
               },
               child: Center(
-                child: Text('Test Profile',
+                child: Text('League Teams',
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 24,
@@ -136,6 +152,7 @@ class LeagueOptions extends StatelessWidget {
               ),
             ),
           ),
+          
         ],
       ),
     );

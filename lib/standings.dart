@@ -7,7 +7,8 @@ import 'package:podosphere/team_details.dart';
 class Standings extends StatefulWidget {
   final int leagueId;
   final String champName;
-  Standings({required this.leagueId, required this.champName});
+  final int season;
+  Standings({required this.leagueId, required this.champName, required this.season});
 
   @override
   _StandingsState createState() => _StandingsState();
@@ -26,7 +27,7 @@ class _StandingsState extends State<Standings> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://api-football-v1.p.rapidapi.com/v3/standings?season=2023&league=${widget.leagueId}'),
+            'https://api-football-v1.p.rapidapi.com/v3/standings?season=${widget.season}&league=${widget.leagueId}'),
         headers: {
           'X-Rapidapi-Key':
               '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
