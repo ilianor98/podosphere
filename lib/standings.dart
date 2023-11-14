@@ -8,7 +8,8 @@ class Standings extends StatefulWidget {
   final int leagueId;
   final String champName;
   final int season;
-  Standings({required this.leagueId, required this.champName, required this.season});
+  Standings(
+      {required this.leagueId, required this.champName, required this.season});
 
   @override
   _StandingsState createState() => _StandingsState();
@@ -70,7 +71,10 @@ class _StandingsState extends State<Standings> {
           itemCount: standingsData.length,
           itemBuilder: (context, index) {
             final teamData = standingsData[index];
-            return StandingsItem(teamData: teamData);
+            return StandingsItem(
+              teamData: teamData,
+              season: widget.season,
+            );
           },
         ),
       ),
@@ -80,15 +84,19 @@ class _StandingsState extends State<Standings> {
 
 class StandingsItem extends StatelessWidget {
   final Map<String, dynamic> teamData;
+  final int season;
 
-  StandingsItem({required this.teamData});
+  StandingsItem({required this.teamData, required this.season});
 
   void navigateToTeamDetails(BuildContext context, int teamId) {
     // Navigate to the TeamDetailsPage and pass the team's ID as a parameter
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TeamDetailsPage(teamId: teamId),
+        builder: (context) => TeamDetailsPage(
+          teamId: teamId,
+          season: season,
+        ),
       ),
     );
   }

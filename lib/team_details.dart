@@ -5,8 +5,10 @@ import 'package:podosphere/match_details.dart';
 
 class TeamDetailsPage extends StatefulWidget {
   final int teamId;
+  final int season;
 
-  const TeamDetailsPage({super.key, required this.teamId});
+  const TeamDetailsPage(
+      {super.key, required this.teamId, required this.season});
 
   @override
   _TeamDetailsPageState createState() => _TeamDetailsPageState();
@@ -33,7 +35,7 @@ class _TeamDetailsPageState extends State<TeamDetailsPage> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://api-football-v1.p.rapidapi.com/v3/fixtures?season=2023&team=${widget.teamId}'),
+            'https://api-football-v1.p.rapidapi.com/v3/fixtures?season=${widget.season}&team=${widget.teamId}'),
         headers: {
           'X-Rapidapi-Key':
               '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
