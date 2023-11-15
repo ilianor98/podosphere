@@ -85,13 +85,13 @@ final List<LeagueInfo> leagueList = [
     flag: 'https://media-4.api-sports.io/flags/be.svg',
   ),
   LeagueInfo(
-    name: 'UEFA Champions League',
+    name: 'UEFA Champions\nLeague',
     logo: 'https://media-4.api-sports.io/football/leagues/2.png',
     id: 2,
     flag: 'null',
   ),
   LeagueInfo(
-    name: 'UEFA Europa League',
+    name: 'UEFA Europa\nLeague',
     logo: 'https://media-4.api-sports.io/football/leagues/3.png',
     id: 3,
     flag: 'null',

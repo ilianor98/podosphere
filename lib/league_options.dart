@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podosphere/ch_leag_display.dart';
 import 'package:podosphere/league_history.dart';
 import 'package:podosphere/league_teams.dart';
 import 'package:podosphere/standings.dart';
@@ -152,7 +153,34 @@ class LeagueOptions extends StatelessWidget {
               ),
             ),
           ),
-          
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChampionsLeagueDisplay(
+                      
+                    ),
+                  ),
+                );
+                // You can navigate to a page that lists older seasons for the selected league here
+              },
+              child: Center(
+                child: Text('test chou lou',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 24,
+                    )),
+              ),
+            ),
+          ),
         ],
       ),
     );
