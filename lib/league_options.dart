@@ -35,8 +35,8 @@ class LeagueOptions extends StatelessWidget {
         ),
         title: Row(
           children: [
-            Image.network(
-              '$logo',
+            Image.asset(
+              'assets/images/$logo',
               width: 50, // Adjust the width as needed
               height: 50, // Adjust the height as needed
             ),
