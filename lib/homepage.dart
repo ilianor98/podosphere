@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:podosphere/games_by_league.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -105,7 +106,7 @@ class _HomePageState extends State<HomePage> {
 
     try{
     final response = await http.get(
-      Uri.parse('https://api-football-v1.p.rapidapi.com/v3/fixtures?date=$todayDate'),
+      Uri.parse('https://api-football-v1.p.rapidapi.com/v3/fixtures?date=2023-11-12&timezone=Europe/Athens'),
       headers: {
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
         'x-rapidapi-key': '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
@@ -121,8 +122,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
             fixtures = List<Map<String, dynamic>>.from(tempFixtures);
           });
-      print(fixtures);
-      
+
     } else  {
           throw Exception('Invalid response format');
         }
@@ -139,8 +139,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:  Colors.green,
       appBar: AppBar(
-        title: Text('Today\'s Fixtures'),
+        title: const Text('Today\'s Fixtures', textAlign: TextAlign.center, style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),),
+        backgroundColor: const Color(0xFF333333),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -148,35 +151,15 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
-              children: [
-                for (final league in leagueList)
-                  Container(
-                    
-                    padding: EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                color: Colors.cyan,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-                    child: Table(
-                      children: [
-                        TableRow(
-                          children: [
-                            Text(league.name, textAlign: TextAlign.center,),
-                            
-                          ],
-                        ),
-                        for (final fixture in fixtures)
-                          if (fixture['league']['id'] == league.id)
-                            TableRow(children: [
-                              Text(
-                                  '${fixture['teams']['home']['name']} vs ${fixture['teams']['away']['name']}'),
-                              Text(
-                                  'Time: ${fixture['fixture']['date'].split('T')[1].substring(0, 5)} | Score: ${fixture['score']['fulltime']['home']} - ${fixture['score']['fulltime']['away']}'),
-                      ],),
-                      ],
-                    ),
-                  ),
-              ],
+              children: leagueList.map((league) {
+                return FixturesLeague(
+                  leagueName: league.name,
+                  leagueData: fixtures,
+                  leagueId: league.id,
+                  logo: league.logo,
+                  flag: league.flag,
+                );
+              }).toList(),
             ),
           ),
         ),
