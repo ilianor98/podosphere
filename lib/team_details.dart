@@ -6,9 +6,10 @@ import 'package:podosphere/match_details.dart';
 class TeamDetailsPage extends StatefulWidget {
   final int teamId;
   final int season;
+  final String teamName;
 
   const TeamDetailsPage(
-      {super.key, required this.teamId, required this.season});
+      {super.key, required this.teamId, required this.season, required this.teamName});
 
   @override
   _TeamDetailsPageState createState() => _TeamDetailsPageState();
@@ -72,6 +73,49 @@ class _TeamDetailsPageState extends State<TeamDetailsPage> {
     }
   }
 
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.green,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF333333),
+        title: Text('${widget.teamName} Match History', style: TextStyle(color: Colors.green),),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+                color: const Color(0xFF333333),
+                borderRadius: BorderRadius.circular(10.0)),
+          child: matches.isEmpty
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: matches.length,
+                  itemBuilder: (context, index) {
+                    final matchData = matches[index];
+                    return FixtureItem(matchData: matchData);
+                  },
+                ),
+        ),
+      ),
+    );
+  }
+
+}
+
+class FixtureItem extends StatelessWidget {
+  final Map<String, dynamic> matchData;
+
+  const FixtureItem({Key? key, required this.matchData}) : super(key: key);
+
+  String parseDate(String date) {
+    final parsedDate = DateTime.parse(date);
+    return "${parsedDate.day.toString().padLeft(2, '0')}/${parsedDate.month.toString().padLeft(2, '0')}/${parsedDate.year}";
+  }
+
   void navigateToMatchDetails(
       int fixtureId, int scoreHome, int scoreAway, BuildContext context) {
     Navigator.push(
@@ -88,200 +132,110 @@ class _TeamDetailsPageState extends State<TeamDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF333333),
-        title:
-            const Text('Game History', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-      ),
-      body: Container(
-        color: const Color(0xFF333333),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Center(
-            child: Row(
-              children: [
-                Expanded(
-                  child: DataTable(
-                    dataRowMinHeight: 75,
-                    dataRowMaxHeight: 75,
-                    columnSpacing: 12,
-                    columns: const [
-                      DataColumn(
-                        label: Text('Home Team',
-                            style: TextStyle(color: Colors.white)),
-                        numeric: false,
-                      ),
-                    ],
-                    rows: matches.map((matchData) {
-                      final homeTeam = matchData['teams']['home'];
-                      final homeTeamLogo = homeTeam['logo'];
-                      final homeTeamName = homeTeam['name'];
+    final fixture = matchData['fixture'];
+    final teams = matchData['teams'];
+    final goals = matchData['goals'];
+    final score = matchData['score'];
 
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  navigateToMatchDetails(
-                                      matchData['fixture']['id'],
-                                      matchData['score']['fulltime']['home'],
-                                      matchData['score']['fulltime']['away'],
-                                      context);
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Image.network(homeTeamLogo,
-                                        width: 40, height: 40),
-                                    Text(
-                                      homeTeamName,
-                                      style: const TextStyle(
-                                          color: Colors.grey, fontSize: 12),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+    final homeTeam = teams['home'];
+    final awayTeam = teams['away'];
+    final matchDate = parseDate(fixture['date']);
+
+    final homeGoals = goals['home'];
+    final awayGoals = goals['away'];
+    final isNullScore = homeGoals == null && awayGoals == null;
+
+    return GestureDetector(
+      onTap: () {
+        navigateToMatchDetails(
+          fixture['id'],
+          score['fulltime']['home'],
+          score['fulltime']['away'],
+          context,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          
+          border: Border(
+            bottom: BorderSide(color: Colors.grey.shade400),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.network(
+                      homeTeam['logo'],
+                      width: 40,
+                      height: 40,
+                    ),
+                    Text(
+                      homeTeam['name'],
+                      style: TextStyle(color: Colors.white), textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      isNullScore ? matchDate : '$homeGoals - $awayGoals',
+                      style: TextStyle(fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: isNullScore ? Colors.grey : Colors.white,
+                      ),textAlign: TextAlign.center,
+                    ),
+                    if (!isNullScore)
+                      Column(
+                        children: [
+                          SizedBox(height: 4),
+                          Text(
+                            matchDate,
+                            style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,
                           ),
                         ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-                Expanded(
-                  child: DataTable(
-                    dataRowMinHeight: 75,
-                    dataRowMaxHeight: 75,
-                    columnSpacing: 12,
-                    columns: const [
-                      DataColumn(
-                        label: Text('Score',
-                            style: TextStyle(color: Colors.white)),
-                        numeric: false,
                       ),
-                    ],
-                    rows: matches.map((matchData) {
-                      final score = matchData['score']['fulltime'];
-                      final matchDate = parseDate(matchData['fixture']['date']);
-                      final matchType = matchData['league']['name'];
-
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  navigateToMatchDetails(
-                                      matchData['fixture']['id'],
-                                      matchData['score']['fulltime']['home'],
-                                      matchData['score']['fulltime']['away'],
-                                      context);
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    if (score['home'] != null)
-                                      Text(
-                                        '${score['home']}-${score['away']}',
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 25),
-                                      )
-                                    else
-                                      Text(
-                                        matchDate,
-                                        style: const TextStyle(
-                                            color: Colors.grey, fontSize: 25),
-                                      ),
-                                    if (score['home'] != null)
-                                      Text(
-                                        matchDate,
-                                        style: const TextStyle(
-                                            color: Colors.grey, fontSize: 12),
-                                      )
-                                    else
-                                      const Text(
-                                        ' ',
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 25),
-                                      ),
-                                    Text(
-                                      matchType,
-                                      style: const TextStyle(
-                                          color: Colors.grey, fontSize: 10),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                    Text(
+                      matchData['league']['name'],
+                      style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: DataTable(
-                    dataRowMinHeight: 75,
-                    dataRowMaxHeight: 75,
-                    columnSpacing: 12,
-                    columns: const [
-                      DataColumn(
-                        label: Text('Away Team',
-                            style: TextStyle(color: Colors.white)),
-                        numeric: false,
-                      ),
-                    ],
-                    rows: matches.map((matchData) {
-                      final awayTeam = matchData['teams']['away'];
-                      final awayTeamLogo = awayTeam['logo'];
-                      final awayTeamName = awayTeam['name'];
-
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  navigateToMatchDetails(
-                                      matchData['fixture']['id'],
-                                      matchData['score']['fulltime']['home'],
-                                      matchData['score']['fulltime']['away'],
-                                      context);
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Image.network(awayTeamLogo,
-                                        width: 40, height: 40),
-                                    Text(
-                                      awayTeamName,
-                                      style: const TextStyle(
-                                          color: Colors.grey, fontSize: 12),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.network(
+                      awayTeam['logo'],
+                      width: 40,
+                      height: 40,
+                    ),
+                    Text(
+                      awayTeam['name'],
+                      style: TextStyle(color: Colors.white),textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
+

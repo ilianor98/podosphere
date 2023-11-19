@@ -59,23 +59,29 @@ class _StandingsState extends State<Standings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       appBar: AppBar(
         backgroundColor: const Color(0xFF333333), // Dark mode background color
         title:
-            Text('${widget.champName}', style: TextStyle(color: Colors.white)),
+            Text('${widget.champName}', style: TextStyle(color: Colors.green)),
         centerTitle: true, // Center-align the title
       ),
-      body: Container(
-        color: const Color(0xFF333333), // Change the background color
-        child: ListView.builder(
-          itemCount: standingsData.length,
-          itemBuilder: (context, index) {
-            final teamData = standingsData[index];
-            return StandingsItem(
-              teamData: teamData,
-              season: widget.season,
-            );
-          },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+              color: const Color(0xFF333333),
+              borderRadius: BorderRadius.circular(10.0)),
+          child: ListView.builder(
+            itemCount: standingsData.length,
+            itemBuilder: (context, index) {
+              final teamData = standingsData[index];
+              return StandingsItem(
+                teamData: teamData,
+                season: widget.season,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -88,7 +94,7 @@ class StandingsItem extends StatelessWidget {
 
   StandingsItem({required this.teamData, required this.season});
 
-  void navigateToTeamDetails(BuildContext context, int teamId) {
+  void navigateToTeamDetails(BuildContext context, int teamId, String teamName) {
     // Navigate to the TeamDetailsPage and pass the team's ID as a parameter
     Navigator.push(
       context,
@@ -96,6 +102,7 @@ class StandingsItem extends StatelessWidget {
         builder: (context) => TeamDetailsPage(
           teamId: teamId,
           season: season,
+          teamName: teamName,
         ),
       ),
     );
@@ -108,19 +115,94 @@ class StandingsItem extends StatelessWidget {
     final goalsFor = teamData['all']['goals']['for'];
     final goalsAgainst = teamData['all']['goals']['against'];
     final teamId = teamData['team']['id'];
+    final form = teamData['form'];
 
     return GestureDetector(
       onTap: () {
-        navigateToTeamDetails(context, teamId);
+        navigateToTeamDetails(context, teamId, teamName);
       },
-      child: ListTile(
-        leading: Image.network(teamData['team']['logo']),
-        title: Text(teamName, style: TextStyle(color: Colors.white)),
-        subtitle: Text(
-          'Points: $points - Goals For: $goalsFor - Goals Against: $goalsAgainst',
-          style: TextStyle(color: Colors.white),
-        ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Image.network(
+              teamData['team']['logo'],
+              height: 50,
+              width: 50,
+            ),
+            title: Text(teamName,
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+            subtitle: Row(
+              children: [
+                Text(
+                  'GF: $goalsFor - GA: $goalsAgainst',
+                  style: TextStyle(color: Colors.white),
+                ),
+                const SizedBox(width: 10), // Adjust spacing if needed
+                FormDisplay(form: form),
+              ],
+            ),
+            trailing: Text(
+              '$points',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class FormDisplay extends StatelessWidget {
+  final String form;
+
+  const FormDisplay({Key? key, required this.form}) : super(key: key);
+
+  Color getColor(String result) {
+    if (result == 'W') {
+      return const Color.fromARGB(255, 18, 107, 21);
+    } else if (result == 'L') {
+      return Color.fromARGB(255, 197, 27, 15);
+    } else if (result == 'D') {
+      return const Color.fromARGB(255, 179, 164, 30);
+    } else {
+      // Handle other cases if needed
+      return Colors.transparent;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: form.split('').map((result) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+          child: Container(
+            width: 15,
+            height: 15,
+            decoration: BoxDecoration(
+              color: getColor(result),
+              borderRadius: BorderRadius.circular(3.0),
+              border: Border.all(
+                color: Colors.black, // You can adjust the border color
+                width: 1.0,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                result,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
