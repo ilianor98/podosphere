@@ -73,7 +73,7 @@ final List<LeagueInfo> leagueList = [
     flag: 'flag_be.svg',
   ),
   LeagueInfo(
-    name: 'UEFA Champions League',
+    name: 'UEFA Champions\nLeague',
     logo: 'logo_2.png',
     id: 2,
     flag: 'null',
@@ -151,13 +151,17 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: leagueList.map((league) {
-                return FixturesLeague(
-                  leagueName: league.name,
-                  leagueData: fixtures,
-                  leagueId: league.id,
-                  logo: league.logo,
-                  flag: league.flag,
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FixturesLeague(
+                    leagueName: league.name,
+                    leagueData: fixtures,
+                    leagueId: league.id,
+                    logo: league.logo,
+                    flag: league.flag,
+                  ),
                 );
               }).toList(),
             ),

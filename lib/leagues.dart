@@ -111,7 +111,8 @@ class _LeaguesState extends State<Leagues> {
                 Column(
                   children: [
                     for (final leagueInfo in leagueList)
-                      Padding(
+                      leagueInfo.flag != 'null'
+                      ? Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: GestureDetector(
                           onTap: () {
@@ -164,6 +165,68 @@ class _LeaguesState extends State<Leagues> {
                                     'assets/images/${leagueInfo.flag}',
                                     width: 50, // Adjust the width as needed
                                     height: 50, // Adjust the height as needed
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ) : Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LeagueOptions(
+                                  leagueId: leagueInfo.id,
+                                  leagueName: leagueInfo.name,
+                                  logo: leagueInfo.logo,
+                                  flag: leagueInfo.flag,
+                                ),
+                              ),
+                            );
+                          },
+                          child: FractionallySizedBox(
+                            widthFactor: 0.9,
+                            child: Container(
+                              padding: EdgeInsets.all(20.0),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF333333),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    color: Colors.white,
+                                    child: Image.asset(
+                                      'assets/images/${leagueInfo.logo}',
+                                      width: 50, // Adjust the width as needed
+                                      height: 50, // Adjust the height as needed
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Text(
+                                    leagueInfo.name,
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Container(
+                                    color: Colors.white,
+                                    child: Image.asset(
+                                      'assets/images/${leagueInfo.logo}',
+                                      width: 50, // Adjust the width as needed
+                                      height: 50, // Adjust the height as needed
+                                    ),
                                   ),
                                 ],
                               ),
