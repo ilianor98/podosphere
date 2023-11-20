@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:podosphere/game_by_league_details.dart';
 
 class FixturesLeague extends StatelessWidget {
   final String leagueName;
@@ -43,71 +44,71 @@ class FixturesLeague extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   flag == 'null'
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Image.asset(
-                          'assets/images/$logo',
-                          width: 30,
-                          height: 30,
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              color: Colors.white,
+                              child: Image.asset(
+                                'assets/images/$logo',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Text(leagueName,
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center),
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Image.asset(
+                                'assets/images/$logo',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              color: Colors.white,
+                              child: Image.asset(
+                                'assets/images/$logo',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Text(
+                              leagueName,
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            SvgPicture.asset(
+                              'assets/images/$flag',
+                              width: 30,
+                              height: 30,
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Text(
-                        leagueName,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.white,
-                        ),textAlign: TextAlign.center
-                      ),SizedBox(
-                        width: 16.0,
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: Image.asset(
-                          'assets/images/$logo',
-                          width: 30,
-                          height: 30,
-                        ),
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Image.asset(
-                          'assets/images/$logo',
-                          width: 30,
-                          height: 30,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Text(
-                        leagueName,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      SvgPicture.asset(
-                        'assets/images/$flag',
-                        width: 30,
-                        height: 30,
-                      ),
-                    ],
-                  ),
                   const SizedBox(height: 8.0),
                   Text(
                     'No fixtures available for this league.',
@@ -121,6 +122,20 @@ class FixturesLeague extends StatelessWidget {
       );
     }
     return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TodayDetails(
+              leagueId: leagueId,
+              leagueName: leagueName,
+              logo: logo,
+              flag: flag,
+              leagueData: leagueData,
+            ),
+          ),
+        );
+      },
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
@@ -145,15 +160,16 @@ class FixturesLeague extends StatelessWidget {
                       SizedBox(
                         width: 16.0,
                       ),
-                      Text(
-                        leagueName,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.white,
-                        ),textAlign: TextAlign.center
-                      ),SizedBox(
+                      Text(leagueName,
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center),
+                      SizedBox(
                         width: 16.0,
-                      ),Container(
+                      ),
+                      Container(
                         color: Colors.white,
                         child: Image.asset(
                           'assets/images/$logo',
@@ -177,13 +193,12 @@ class FixturesLeague extends StatelessWidget {
                       SizedBox(
                         width: 16.0,
                       ),
-                      Text(
-                        leagueName,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.white,
-                        ),textAlign: TextAlign.center
-                      ),
+                      Text(leagueName,
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center),
                       SizedBox(
                         width: 16.0,
                       ),
