@@ -51,8 +51,8 @@ class LeagueOptions extends StatelessWidget {
               ),
             ),
             SizedBox(width: 16.0),
-            SvgPicture.network(
-              '$flag',
+            SvgPicture.asset(
+              'assets/images/$flag',
               width: 50, // Adjust the width as needed
               height: 50, // Adjust the height as needed
             ),
@@ -154,6 +154,8 @@ class LeagueOptions extends StatelessWidget {
                         leagueId: leagueId,
                         champName: leagueName,
                         season: currentSeason,
+                        flag: flag,
+                        logo: logo,
                       ),
                     ),
                   );

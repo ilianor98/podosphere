@@ -101,8 +101,8 @@ class _HomePageState extends State<HomePage> {
   return value.toString().padLeft(2, '0');
 }
 
-    final DateTime now = DateTime.now();
-    final String todayDate = '${now.year}-${_formatDate(now.month)}-${_formatDate(now.day)}';
+    //final DateTime now = DateTime.now();
+    //final String todayDate = '${now.year}-${_formatDate(now.month)}-${_formatDate(now.day)}';
 
     try{
     final response = await http.get(

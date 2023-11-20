@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+// ignore: unused_import
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:podosphere/standings.dart';
 import 'package:podosphere/standings_widget.dart';
 
 class TodayDetails extends StatelessWidget {
@@ -36,7 +36,7 @@ class TodayDetails extends StatelessWidget {
         title: Text(
           '$leagueName Fixtures',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
         backgroundColor: const Color(0xFF333333),
@@ -80,11 +80,11 @@ class TodayDetails extends StatelessWidget {
                           if (shortStatus == 'FT') {
                             return TableRow(
                               children: [
-                                Image.network(homeLogo, width: 30, height: 30),
+                                Image.network(homeLogo, width: 40, height: 40),
                                 Text(
                                   homeTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
                                 Column(
@@ -92,13 +92,13 @@ class TodayDetails extends StatelessWidget {
                                     Text(
                                       '$scoreHome - $scoreAway',
                                       style: const TextStyle(
-                                          fontSize: 14, color: Colors.white),
+                                          fontSize: 18, color: Colors.white),
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
                                       time,
                                       style: const TextStyle(
-                                          fontSize: 10, color: Colors.grey),
+                                          fontSize: 12, color: Colors.grey),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -106,20 +106,20 @@ class TodayDetails extends StatelessWidget {
                                 Text(
                                   awayTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Image.network(awayLogo, width: 30, height: 30),
+                                Image.network(awayLogo, width: 40, height: 40),
                               ],
                             );
                           } else if (shortStatus == 'PST') {
                             return TableRow(
                               children: [
-                                Image.network(homeLogo, width: 30, height: 30),
+                                Image.network(homeLogo, width: 40, height: 40),
                                 Text(
                                   homeTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
                                 Column(
@@ -127,13 +127,13 @@ class TodayDetails extends StatelessWidget {
                                     const Text(
                                       'PST',
                                       style: TextStyle(
-                                          fontSize: 14, color: Colors.white),
+                                          fontSize: 18, color: Colors.white),
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
                                       time,
                                       style: const TextStyle(
-                                          fontSize: 10, color: Colors.grey),
+                                          fontSize: 12, color: Colors.grey),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -141,20 +141,20 @@ class TodayDetails extends StatelessWidget {
                                 Text(
                                   awayTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Image.network(awayLogo, width: 30, height: 30),
+                                Image.network(awayLogo, width: 40, height: 40),
                               ],
                             );
                           } else if (shortStatus == 'CANC') {
                             return TableRow(
                               children: [
-                                Image.network(homeLogo, width: 30, height: 30),
+                                Image.network(homeLogo, width: 40, height: 40),
                                 Text(
                                   homeTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
                                 Column(
@@ -162,13 +162,13 @@ class TodayDetails extends StatelessWidget {
                                     const Text(
                                       'CANC',
                                       style: TextStyle(
-                                          fontSize: 14, color: Colors.white),
+                                          fontSize: 18, color: Colors.white),
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
                                       time,
                                       style: const TextStyle(
-                                          fontSize: 10, color: Colors.grey),
+                                          fontSize: 12, color: Colors.grey),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -176,42 +176,42 @@ class TodayDetails extends StatelessWidget {
                                 Text(
                                   awayTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Image.network(awayLogo, width: 30, height: 30),
+                                Image.network(awayLogo, width: 40, height: 40),
                               ],
                             );
                           } else {
                             // Handle other status cases as needed
                             return TableRow(
                               children: [
-                                Image.network(homeLogo, width: 30, height: 30),
+                                Image.network(homeLogo, width: 40, height: 40),
                                 Text(
                                   homeTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
                                 const Text(
-                                  'Other Status',
+                                  'FAIL',
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.white),
+                                      fontSize: 18, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
                                   time,
                                   style: const TextStyle(
-                                      fontSize: 10, color: Colors.grey),
+                                      fontSize: 12, color: Colors.grey),
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
                                   awayTeam,
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.white),
+                                      fontSize: 15, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Image.network(awayLogo, width: 30, height: 30),
+                                Image.network(awayLogo, width: 40, height: 40),
                               ],
                             );
                           }
@@ -220,6 +220,7 @@ class TodayDetails extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(height: 8.0,),
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(

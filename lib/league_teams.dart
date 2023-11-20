@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:podosphere/team_profile.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LeagueTeams extends StatefulWidget {
   final int leagueId;
   final String champName;
   final int season;
+  final String logo;
+  final String flag;
+
   LeagueTeams(
-      {required this.leagueId, required this.champName, required this.season});
+      {required this.leagueId, required this.champName, required this.season, required this.flag, required this.logo});
 
   @override
   _LeagueTeamsState createState() => _LeagueTeamsState();
@@ -58,19 +62,42 @@ class _LeagueTeamsState extends State<LeagueTeams> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF333333),
+      backgroundColor: Colors.green,
       appBar: AppBar(
         backgroundColor: const Color(0xFF333333),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.blue),
+          icon: Icon(Icons.arrow_back, color: Colors.green),
         ),
-        title: Text(
-          'League Teams',
-          style: TextStyle(fontSize: 24.0, color: Colors.blue),
+        title: Row(
+          children: [
+            Container(
+              color: Colors.white,
+              child: Image.asset(
+                'assets/images/${widget.logo}',
+                width: 30, // Adjust the width as needed
+                height: 30, // Adjust the height as needed
+              ),
+            ),
+            SizedBox(width: 16.0),
+            Text(
+              '${widget.champName}',
+              style: TextStyle(
+                fontSize: 24.0,
+                color: Colors.green,
+              ),
+            ),
+            SizedBox(width: 16.0),
+            SvgPicture.asset(
+              'assets/images/${widget.flag}',
+              width: 30, // Adjust the width as needed
+              height: 30, // Adjust the height as needed
+            ),
+          ],
         ),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: teamsData.length,
@@ -86,7 +113,7 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TeamProfile(teamId: teamId),
+                    builder: (context) => TeamProfile(teamId: teamId, logo: team['team']['logo'], teamName: team['team']['name'], flag: widget.flag),
                   ),
                 );
               },
@@ -94,8 +121,8 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                 margin: EdgeInsets.all(16.0),
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
+                  color: const Color(0xFF333333),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Row(
                   children: [
@@ -108,9 +135,9 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                     Text(
                       team['team']['name'],
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.white,
                         fontSize: 20,
-                      ),
+                      ), textAlign: TextAlign.center,
                     ),
                   ],
                 ),

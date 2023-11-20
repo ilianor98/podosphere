@@ -61,24 +61,29 @@ class _StandingsWidgetState extends State<StandingsWidget> {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(0.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF333333),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: standingsData.isEmpty
-              ? Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: standingsData.map((teamData) {
-                      return StandingsItem(
-                        teamData: teamData,
-                        season: widget.season,
-                      );
-                    }).toList(),
-                  ),
-                ),
+        child: Column(
+          children: [
+            Text('STANDINGS',style: TextStyle(fontSize: 25, color: Colors.white), textAlign: TextAlign.center,),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF333333),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: standingsData.isEmpty
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: standingsData.map((teamData) {
+                          return StandingsItem(
+                            teamData: teamData,
+                            season: widget.season,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+            ),
+          ],
         ),
       ),
     );

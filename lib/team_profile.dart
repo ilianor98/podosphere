@@ -1,11 +1,16 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:podosphere/team_profile_banner.dart';
+import 'package:podosphere/team_profile_venue.dart';
 
 class TeamProfile extends StatefulWidget {
   final int teamId;
+  final String logo;
+  final String teamName;
+  final String flag;
 
-  const TeamProfile({super.key, required this.teamId});
+  const TeamProfile({super.key, required this.teamId, required this.logo, required this.teamName, required this.flag});
 
   @override
   State<TeamProfile> createState() => _TeamProfileState();
@@ -56,77 +61,38 @@ class _TeamProfileState extends State<TeamProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       appBar: AppBar(
-        title: Text('Team Profile'),
+        backgroundColor: const Color(0xFF333333),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back, color: Colors.green),
+        ),
+        title: Text('${widget.teamName} Profile', style: TextStyle(color: Colors.green),),
+        centerTitle: true,
       ),
       body: Container(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ListTile(
-              title: Text(
-                'Team Name: ${profile.isNotEmpty ? profile[0]['team']['name'] : ''}',
-              ),
-              leading: Image.network(
-                profile.isNotEmpty ? profile[0]['team']['logo'] : '',
-                width: 40,
-                height: 40,
-              ),
+            
+            Container(
+              child: TeamProfileBanner(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
             ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                buildOptionButton('Details'),
-                buildOptionButton('Venue'),
-              ],
+            SizedBox(height: 15,),
+            Container(
+              child: TeamProfileVenue(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
             ),
-            SizedBox(height: 16),
-            if (selectedOption == 'Details') buildDetails(),
-            if (selectedOption == 'Venue') buildVenue(),
+            
           ],
         ),
       ),
     );
   }
-
-  Widget buildOptionButton(String option) {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          selectedOption = option;
-        });
-      },
-      child: Text(option),
-    );
-  }
-
-  Widget buildDetails() {
-    return Column(
-      children: [
-        ListTile(
-          title: Text('Founded: ${profile[0]['team']['founded']}'),
-          subtitle: Text('National: ${profile[0]['team']['national']}'),
-        ),
-      ],
-    );
-  }
-
-  Widget buildVenue() {
-    return Column(
-      children: [
-        ListTile(
-          title: Text('Venue: ${profile[0]['venue']['name']}'),
-          subtitle: Text('City: ${profile[0]['venue']['city']}'),
-        ),
-        SizedBox(height: 8),
-        Image.network(
-          profile.isNotEmpty ? profile[0]['venue']['image'] : '',
-          width: 120,
-          height: 120,
-        ),
-      ],
-    );
-  }
 }
+  
+
+  
