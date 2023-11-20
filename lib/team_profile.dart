@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:podosphere/team_profile_banner.dart';
+import 'package:podosphere/team_profile_coach.dart';
+import 'package:podosphere/team_profile_squad.dart';
 import 'package:podosphere/team_profile_venue.dart';
 
 class TeamProfile extends StatefulWidget {
@@ -18,7 +20,6 @@ class TeamProfile extends StatefulWidget {
 
 class _TeamProfileState extends State<TeamProfile> {
   List<Map<String, dynamic>> profile = [];
-  String selectedOption = 'Details';
 
   @override
   void initState() {
@@ -73,21 +74,32 @@ class _TeamProfileState extends State<TeamProfile> {
         title: Text('${widget.teamName} Profile', style: TextStyle(color: Colors.green),),
         centerTitle: true,
       ),
-      body: Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            
-            Container(
-              child: TeamProfileBanner(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
-            ),
-            SizedBox(height: 15,),
-            Container(
-              child: TeamProfileVenue(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
-            ),
-            
-          ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              
+              Container(
+                child: TeamProfileBanner(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
+              ),
+              SizedBox(height: 15,),
+              Container(
+                child: TeamProfileVenue(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
+              ),
+              SizedBox(height: 15,),
+              Container(
+                child: TeamProfileCoach(teamId: widget.teamId)
+              ),
+              SizedBox(height: 15,),
+              Container(
+                child: TeamProfileSquad(teamId: widget.teamId)
+              ),
+              
+            ],
+          ),
         ),
       ),
     );
