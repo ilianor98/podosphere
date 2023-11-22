@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:podosphere/player_details.dart';
 
 class TeamProfileSquad extends StatefulWidget {
   final int teamId;
@@ -94,10 +95,16 @@ class _TeamProfileSquadState extends State<TeamProfileSquad> {
                           );
                         },
                         child: Container(
-                          child: Image.network(
-                            player['photo'],
-                            height: 65,
-                            width: 65,
+                          height: 65,
+                          width: 65,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                player['photo'],
+                              ),
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       ),
@@ -110,10 +117,21 @@ class _TeamProfileSquadState extends State<TeamProfileSquad> {
                   verticalAlignment: TableCellVerticalAlignment.middle,
                   child: Column(
                     children: [
-                      Center(
-                        child: Text(
-                          player['name'],
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PlayerDetails(playerId: player['id']),
+                            ),
+                          );
+                        },
+                        child: Center(
+                          child: Text(
+                            player['name'],
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
                         ),
                       ),
                       SizedBox(
