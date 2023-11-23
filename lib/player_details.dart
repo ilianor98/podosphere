@@ -48,13 +48,22 @@ class _PlayerDetailsState extends State<PlayerDetails> {
     } catch (e) {
       print('Error: $e');
     }
+    print(player[0]['player']['id']);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       appBar: AppBar(
-        title: Text('Player Details'),
+        title: const Text(
+          'Player Details',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF333333),
+        centerTitle: true,
       ),
       body: player.isNotEmpty
           ? SingleChildScrollView(
@@ -91,8 +100,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                               );
                             },
                             child: Container(
-                              height: 75,
-                              width: 75,
+                              height: 90,
+                              width: 90,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
@@ -160,51 +169,143 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                                 const SizedBox(
                                   height: 5,
                                 ),
+                                Text(
+                                  'Height: ${player[0]['player']['height']}',
+                                  style: const TextStyle(
+                                      color: Colors.grey, fontSize: 12),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Weight: ${player[0]['player']['weight']}',
+                                  style: const TextStyle(
+                                      color: Colors.grey, fontSize: 12),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(player[0]['player']['photo']),
-                        radius: 50,
-                      ),
+                    SizedBox(
+                      height: 15,
                     ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Name: ${player[0]['player']['firstname']} ${player[0]['player']['lastname']}',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    SizedBox(height: 10),
-                    Text('Age: ${player[0]['player']['age']}'),
-                    Text('Nationality: ${player[0]['player']['nationality']}'),
-                    Text('Height: ${player[0]['player']['height']}'),
-                    Text('Weight: ${player[0]['player']['weight']}'),
-                    SizedBox(height: 20),
-                    Text(
-                      'Statistics:',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 10),
-                    for (var stat in player[0]['statistics'])
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('League: ${stat['league']['name']}'),
-                          Text('Position: ${stat['games']['position']}'),
-                          // Add other statistics here...
-                          SizedBox(height: 10),
-                        ],
-                      ),
+                    LeaguesDropdown(statistics: player[0]['statistics'])
                   ],
                 ),
               ),
             )
           : Center(child: CircularProgressIndicator()),
+    );
+  }
+}
+
+class LeaguesDropdown extends StatefulWidget {
+  final List<Map<String, dynamic>> statistics;
+
+  const LeaguesDropdown({
+    required this.statistics,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _LeaguesDropdownState createState() => _LeaguesDropdownState();
+}
+
+class _LeaguesDropdownState extends State<LeaguesDropdown> {
+  late List<String> leagues;
+  late Map<String, List<Map<String, dynamic>>> leagueStats;
+  late String? selectedLeague;
+
+  @override
+  void initState() {
+    super.initState();
+    extractLeagues();
+  }
+
+  void extractLeagues() {
+    Set<String> uniqueLeagues = Set();
+
+    for (var stat in widget.statistics) {
+      if (stat['league'] != null && stat['league']['name'] != null) {
+        uniqueLeagues.add(stat['league']['name']);
+      }
+    }
+
+    leagues = uniqueLeagues.toList();
+
+    leagueStats = {};
+    for (var league in leagues) {
+      leagueStats[league] = widget.statistics
+          .where((stat) => stat['league']['name'] == league)
+          .toList();
+    }
+
+    if (leagues.isNotEmpty) {
+      selectedLeague = leagues.first;
+    }
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Leagues Participated:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        SizedBox(height: 10),
+        DropdownButton<String>(
+          hint: Text('Select a league'),
+          value: selectedLeague,
+          items: leagues
+              .map<DropdownMenuItem<String>>(
+                (String value) => DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                ),
+              )
+              .toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedLeague = newValue;
+            });
+          },
+        ),
+        if (selectedLeague != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              Text(
+                'Statistics for $selectedLeague:',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              for (var stat in leagueStats[selectedLeague]!)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 5),
+                    Text('Games: ${stat['games']['appearences']}'),
+                    // Display other statistics as needed
+                  ],
+                ),
+            ],
+          ),
+      ],
     );
   }
 }
