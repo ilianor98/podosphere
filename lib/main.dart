@@ -3,6 +3,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:podosphere/favorites.dart';
 import 'package:podosphere/homepage.dart';
 import 'package:podosphere/leagues.dart';
+import 'package:podosphere/news.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,6 +37,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
         HomePage(),
         Leagues(),
         Favorites(),
+        News(),
       ],
       items: [
         PersistentBottomNavBarItem(
@@ -53,6 +55,12 @@ class _BottomNavPageState extends State<BottomNavPage> {
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.star),
           title: 'Favorites',
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.green,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.newspaper),
+          title: 'News',
           activeColorPrimary: Colors.white,
           inactiveColorPrimary: Colors.green,
         ),

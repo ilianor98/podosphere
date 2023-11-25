@@ -101,12 +101,12 @@ class _HomePageState extends State<HomePage> {
   return value.toString().padLeft(2, '0');
 }
 
-    //final DateTime now = DateTime.now();
-    //final String todayDate = '${now.year}-${_formatDate(now.month)}-${_formatDate(now.day)}';
+    final DateTime now = DateTime.now();
+    final String todayDate = '${now.year}-${_formatDate(now.month)}-${_formatDate(now.day)}';
 
     try{
     final response = await http.get(
-      Uri.parse('https://api-football-v1.p.rapidapi.com/v3/fixtures?date=2023-11-12&timezone=Europe/Athens'),
+      Uri.parse('https://api-football-v1.p.rapidapi.com/v3/fixtures?date=$todayDate&timezone=Europe/Athens'),
       headers: {
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
         'x-rapidapi-key': '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
@@ -134,7 +134,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  
+  Future<void> _refreshData() async {
+    await fetchFixtures();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,25 +147,30 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color(0xFF333333),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: leagueList.map((league) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FixturesLeague(
-                    leagueName: league.name,
-                    leagueData: fixtures,
-                    leagueId: league.id,
-                    logo: league.logo,
-                    flag: league.flag,
-                  ),
-                );
-              }).toList(),
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        color: Colors.green,
+        backgroundColor: const Color(0xFF333333),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: leagueList.map((league) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FixturesLeague(
+                      leagueName: league.name,
+                      leagueData: fixtures,
+                      leagueId: league.id,
+                      logo: league.logo,
+                      flag: league.flag,
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ),

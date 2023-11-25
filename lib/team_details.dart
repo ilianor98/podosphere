@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:podosphere/match_details.dart';
+//import 'package:podosphere/match_details.dart';
+import 'package:podosphere/match_details1.dart';
 
 class TeamDetailsPage extends StatefulWidget {
   final int teamId;
@@ -117,14 +118,15 @@ class FixtureItem extends StatelessWidget {
   }
 
   void navigateToMatchDetails(
-      int fixtureId, int scoreHome, int scoreAway, BuildContext context) {
+      int fixtureId, int scoreHome, int scoreAway, String shortStatus, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MatchDetails(
+        builder: (context) => MatchDetailsTest(
           fixtureId: fixtureId,
-          scoreHome: scoreHome,
-          scoreAway: scoreAway,
+          homeScore: scoreHome,
+          awayScore: scoreAway,
+          shortStatus: shortStatus,
         ),
       ),
     );
@@ -143,6 +145,7 @@ class FixtureItem extends StatelessWidget {
 
     final homeGoals = goals['home'];
     final awayGoals = goals['away'];
+    final shortstatus = matchData['fixture']['status']['short'];
     final isNullScore = homeGoals == null && awayGoals == null;
 
     return GestureDetector(
@@ -151,6 +154,7 @@ class FixtureItem extends StatelessWidget {
           fixture['id'],
           score['fulltime']['home'],
           score['fulltime']['away'],
+          shortstatus,
           context,
         );
       },
@@ -196,6 +200,10 @@ class FixtureItem extends StatelessWidget {
                         color: isNullScore ? Colors.grey : Colors.white,
                       ),textAlign: TextAlign.center,
                     ),
+                    Text(
+                      isNullScore ? matchDate : '$shortstatus',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),textAlign: TextAlign.center,
+                    ),
                     if (!isNullScore)
                       Column(
                         children: [
@@ -206,6 +214,7 @@ class FixtureItem extends StatelessWidget {
                           ),
                         ],
                       ),
+                    
                     Text(
                       matchData['league']['name'],
                       style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,

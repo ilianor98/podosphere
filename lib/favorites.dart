@@ -9,7 +9,7 @@ class Favorites extends StatefulWidget {
 
 class _FavoritesState extends State<Favorites> {
   bool isFavorite = false;
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +36,16 @@ class _FavoritesState extends State<Favorites> {
           ),
         ],
       ),
-      body: const Center(
-        child: Text("Favorites under construction"),
+      body: Center(
+        child: Column(
+          children: [
+            Text("Favorites under construction", style: TextStyle(color: Colors.red, fontSize: 25),),
+            SizedBox(height: 20,),
+            Container(child: Image.network('https://media.tenor.com/YgsRuQaF7UMAAAAC/jackhanmer-construction.gif')),
+            
+
+          ],
+        ),
       ),
     );
   }

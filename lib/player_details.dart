@@ -170,7 +170,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'Height: ${player[0]['player']['height']}',
+                                  'Height: ${player[0]['player']['height'] ?? '-'}',
                                   style: const TextStyle(
                                       color: Colors.grey, fontSize: 12),
                                 ),
@@ -178,7 +178,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'Weight: ${player[0]['player']['weight']}',
+                                  'Weight: ${player[0]['player']['weight'] ?? '-'}',
                                   style: const TextStyle(
                                       color: Colors.grey, fontSize: 12),
                                 ),
@@ -194,7 +194,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                     SizedBox(
                       height: 15,
                     ),
-                    LeaguesDropdown(statistics: player[0]['statistics'])
+                    PlayerLeagueStats(player: player)
                   ],
                 ),
               ),
@@ -204,108 +204,211 @@ class _PlayerDetailsState extends State<PlayerDetails> {
   }
 }
 
-class LeaguesDropdown extends StatefulWidget {
-  final List<Map<String, dynamic>> statistics;
+class PlayerLeagueStats extends StatelessWidget {
+  final List<Map<String, dynamic>> player;
 
-  const LeaguesDropdown({
-    required this.statistics,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _LeaguesDropdownState createState() => _LeaguesDropdownState();
-}
-
-class _LeaguesDropdownState extends State<LeaguesDropdown> {
-  late List<String> leagues;
-  late Map<String, List<Map<String, dynamic>>> leagueStats;
-  late String? selectedLeague;
-
-  @override
-  void initState() {
-    super.initState();
-    extractLeagues();
-  }
-
-  void extractLeagues() {
-    Set<String> uniqueLeagues = Set();
-
-    for (var stat in widget.statistics) {
-      if (stat['league'] != null && stat['league']['name'] != null) {
-        uniqueLeagues.add(stat['league']['name']);
-      }
-    }
-
-    leagues = uniqueLeagues.toList();
-
-    leagueStats = {};
-    for (var league in leagues) {
-      leagueStats[league] = widget.statistics
-          .where((stat) => stat['league']['name'] == league)
-          .toList();
-    }
-
-    if (leagues.isNotEmpty) {
-      selectedLeague = leagues.first;
-    }
-
-    setState(() {});
-  }
+  const PlayerLeagueStats({super.key, required this.player});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Leagues Participated:',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        SizedBox(height: 10),
-        DropdownButton<String>(
-          hint: Text('Select a league'),
-          value: selectedLeague,
-          items: leagues
-              .map<DropdownMenuItem<String>>(
-                (String value) => DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                ),
-              )
-              .toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedLeague = newValue;
-            });
-          },
-        ),
-        if (selectedLeague != null)
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF333333),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          Text('Current Season Stats', style: TextStyle(color: Colors.white, fontSize: 20),),
+          SizedBox(height: 5),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10),
-              Text(
-                'Statistics for $selectedLeague:',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              for (var stat in leagueStats[selectedLeague]!)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 5),
-                    Text('Games: ${stat['games']['appearences']}'),
-                    // Display other statistics as needed
-                  ],
-                ),
-            ],
+            children: player[0]['statistics']
+                .map<ExpansionTile>(
+                  (leagueData) => ExpansionTile(
+                    collapsedIconColor: Colors.white,
+                    iconColor: Colors.white,
+                    title: Row(
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: Image.network(
+                            '${leagueData['league']['logo']}',
+                            width: 30, // Adjust the width as needed
+                            height: 30, // Adjust the height as needed
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16.0,
+                        ),
+                        Expanded(child: Text(leagueData['league']['name'], style: TextStyle(color: Colors.white), softWrap: true,)),
+                      ],
+                    ),
+                    children: [
+                      // Sub-tiles (player stats)
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Appearences:', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['games']['appearences']}', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Total minutes:', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['games']['minutes']}', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Rating:', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['games']['rating'] != null ? double.parse(leagueData['games']['rating']).toStringAsFixed(2) : 'N/A'}', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Shots(On target):', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['shots']['total'] ?? '0'}(${leagueData['shots']['on'] ?? '0'})', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Goals:', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['goals']['total']}', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Passes(Accuracy):', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['passes']['total'] ?? '0'}(${leagueData['passes']['accuracy'] ?? '0'})', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Tackles:', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['tackles']['total'] ?? '0'}', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Interceptions:', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['tackles']['interceptions'] ?? '0'}', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Duels(Won):', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['duels']['total'] ?? '0'}(${leagueData['duels']['won'] ?? '0'})', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Dribbles(Successful):', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '${leagueData['dribbles']['attempts'] ?? '0'}(${leagueData['dribbles']['success'] ?? '0'})', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Fouls(Drawn/Committed):', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '(${leagueData['fouls']['drawn'] ?? '0'}/${leagueData['fouls']['commited'] ?? '0'})', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Cards(Yellow/Red):', style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '(${leagueData['cards']['yellow']}/${leagueData['cards']['red']})', style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Add other stats as ListTile widgets
+                    ],
+                  ),
+                )
+                .toList(),
           ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -111,7 +111,7 @@ class FixturesLeague extends StatelessWidget {
                         ),
                   const SizedBox(height: 8.0),
                   Text(
-                    'No fixtures available for this league.',
+                    'No fixtures today.',
                     style: const TextStyle(color: Colors.white),
                   ),
                 ],
@@ -229,43 +229,9 @@ class FixturesLeague extends StatelessWidget {
                   final scoreAway = fixture['goals']['away'];
                   final time = formatTime(fixture['fixture']['date']);
                   final shortStatus = fixture['fixture']['status']['short'];
+                  final timeElapsed = fixture['fixture']['status']['elapsed'];
 
-                  if (shortStatus == 'FT') {
-                    return TableRow(
-                      children: [
-                        Image.network(homeLogo, width: 30, height: 30),
-                        Text(
-                          homeTeam,
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              '$scoreHome - $scoreAway',
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              time,
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          awayTeam,
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        Image.network(awayLogo, width: 30, height: 30),
-                      ],
-                    );
-                  } else if (shortStatus == 'PST') {
+                  if (shortStatus == 'PST') {
                     return TableRow(
                       children: [
                         Image.network(homeLogo, width: 30, height: 30),
@@ -335,8 +301,7 @@ class FixturesLeague extends StatelessWidget {
                         Image.network(awayLogo, width: 30, height: 30),
                       ],
                     );
-                  } else {
-                    // Handle other status cases as needed
+                  } else if (shortStatus == 'NS') {
                     return TableRow(
                       children: [
                         Image.network(homeLogo, width: 30, height: 30),
@@ -346,16 +311,87 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        const Text(
-                          'Other Status',
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                          textAlign: TextAlign.center,
+                        Column(
+                          children: [
+                            
+                            Text(
+                              time,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                         Text(
-                          time,
-                          style:
-                              const TextStyle(fontSize: 10, color: Colors.grey),
+                          awayTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
+                        ),
+                        Image.network(awayLogo, width: 30, height: 30),
+                      ],
+                    );
+                  } else if (shortStatus != 'FT') {
+                    return TableRow(
+                      children: [
+                        Image.network(homeLogo, width: 30, height: 30),
+                        Text(
+                          homeTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '$scoreHome - $scoreAway',
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(width: 3,),
+                            Container(
+                              height: 16,
+                              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.green),
+                              child: Center(child: Text(timeElapsed.toString(), style: TextStyle(color: Colors.white), ),),
+                            )
+                          ],
+                        ),
+                        Text(
+                          awayTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Image.network(awayLogo, width: 30, height: 30),
+                      ],
+                    );
+                  } else {
+                    return TableRow(
+                      children: [
+                        Image.network(homeLogo, width: 30, height: 30),
+                        Text(
+                          homeTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '$scoreHome - $scoreAway',
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            
+                            Text(
+                              shortStatus,
+                              style: const TextStyle(
+                                  fontSize: 10, color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                         Text(
                           awayTeam,
