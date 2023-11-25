@@ -81,152 +81,151 @@ class _MatchDetailsTestState extends State<MatchDetailsTest> {
         backgroundColor: const Color(0xFF333333),
         centerTitle: true,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF333333),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Flexible(
-                          flex: 5,
-                          child: Text(
-                            homeTeam,
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white),
-                            textAlign: TextAlign.center,
-                            softWrap: true,
-                          ),
-                        ),
-                        if (shortStatus == 'PST')
-                          Flexible(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'PST',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          )
-                        else if (shortStatus == 'CANC')
-                          Flexible(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'CANC',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          )
-                        else
-                          Flexible(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                // Widgets for default
-                                Text(
-                                  '$scoreHome - $scoreAway',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  shortStatus,
-                                  style: const TextStyle(
-                                      fontSize: 10, color: Colors.grey),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        Flexible(
-                          flex: 5,
-                          child: Text(
-                            awayTeam,
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white),
-                            textAlign: TextAlign.center,
-                            softWrap: true,
-                          ),
-                        ),
-                      ]),
-                ),
-                SizedBox(height: 15,),
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF333333),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Column(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: const Color(0xFF333333),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Flexible(
-                              flex: 2,
-                              child: Image.network(homeLogo,
-                                  width: 55, height: 55)),
-                          Flexible(
-                            flex: 6,
-                            child: Text(
-                              'Game Stats',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
-                          Flexible(
-                              flex: 2,
-                              child: Image.network(awayLogo,
-                                  width: 55, height: 55)),
-                        ],
+                      Flexible(
+                        fit: FlexFit.tight,
+                          flex: 2,
+                          child: Image.network(homeLogo,
+                              width: 55, height: 55)),
+                      const Flexible(
+                        fit: FlexFit.tight,
+                        flex: 6,
+                        child: Text(
+                          'Game Stats',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: TextAlign.center,
+                        ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: fixtureStats.isNotEmpty
-                            ? List.generate(
-                                fixtureStats[0]['statistics'].length,
-                                (index) {
-                                  return Column(
-                                    children: [
-                                      StatItem(
-                                        homeTeamStat: fixtureStats[0]
-                                            ['statistics'][index],
-                                        awayTeamStat: fixtureStats[1]
-                                            ['statistics'][index],
-                                      ),
-                                      const SizedBox(
-                                          height:
-                                              10), // Adjust the height as needed
-                                    ],
-                                  );
-                                },
-                              ).toList()
-                            : [],
-                      ),
+                      Flexible(
+                        fit: FlexFit.tight,
+                          flex: 2,
+                          child: Image.network(awayLogo,
+                              width: 55, height: 55)),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 5,
+                      child: Text(
+                        homeTeam,
+                        style: const TextStyle(
+                            fontSize: 18, color: Colors.white),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                      ),
+                    ),
+                    if (shortStatus == 'PST')
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 3,
+                        child: Column(
+                          children: [
+                            Text(
+                              'PST',
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    else if (shortStatus == 'CANC')
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 3,
+                        child: Column(
+                          children: [
+                            Text(
+                              'CANC',
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 3,
+                        child: Column(
+                          children: [
+                            // Widgets for default
+                            Text(
+                              '$scoreHome - $scoreAway',
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              shortStatus,
+                              style: const TextStyle(
+                                  fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 5,
+                      child: Text(
+                        awayTeam,
+                        style: const TextStyle(
+                            fontSize: 18, color: Colors.white),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                      ),
+                    ),
+                  ]),
+                  const SizedBox(
+                    height: 10,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: fixtureStats.isNotEmpty
+                        ? List.generate(
+                            fixtureStats[0]['statistics'].length,
+                            (index) {
+                              return Column(
+                                children: [
+                                  StatItem(
+                                    homeTeamStat: fixtureStats[0]
+                                        ['statistics'][index],
+                                    awayTeamStat: fixtureStats[1]
+                                        ['statistics'][index],
+                                  ),
+                                  const SizedBox(
+                                      height:
+                                          10), // Adjust the height as needed
+                                ],
+                              );
+                            },
+                          ).toList()
+                        : [],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -244,6 +243,10 @@ class StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeTeamValue = homeTeamStat?['value'];
+    final homeTeamType = homeTeamStat?['type'];
+    final awayTeamValue = awayTeamStat?['value'];
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -251,30 +254,34 @@ class StatItem extends StatelessWidget {
           flex: 2,
           child: Container(
             child: Text(
-              homeTeamStat?['value'].toString() ?? '',
+              homeTeamValue != null ? homeTeamValue.toString() : '0',
               style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
             ),
           ),
         ),
         Flexible(
           flex: 6,
           child: Container(
-            child: Text(homeTeamStat?['type'] ?? '',
-                style: const TextStyle(color: Colors.white)),
+            child: Text(
+              homeTeamType == 'expected_goals' ? 'Expected goals' : homeTeamType ?? '-',
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ),
         Flexible(
           flex: 2,
           child: Container(
             child: Text(
-              awayTeamStat?['value'].toString() ?? '',
+              awayTeamValue != null ? awayTeamValue.toString() : '0',
               style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
             ),
           ),
         ),
@@ -282,3 +289,5 @@ class StatItem extends StatelessWidget {
     );
   }
 }
+
+

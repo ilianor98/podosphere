@@ -119,6 +119,10 @@ class StandingsItem extends StatelessWidget {
     final goalsAgainst = teamData['all']['goals']['against'];
     final teamId = teamData['team']['id'];
     final form = teamData['form'];
+    //final gamesPlayed = teamData['all']['played'];
+    final gamesWon = teamData['all']['win'];
+    final gamesDraw = teamData['all']['draw'];
+    final gamesLost = teamData['all']['lose'];
 
     return GestureDetector(
       onTap: () {
@@ -132,7 +136,7 @@ class StandingsItem extends StatelessWidget {
               height: 50,
               width: 50,
             ),
-            title: Text(teamName,
+            title: Text('$teamName (${gamesWon.toString()}/${gamesDraw.toString()}/${gamesLost.toString()})',
                 style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold)),
             subtitle: Row(

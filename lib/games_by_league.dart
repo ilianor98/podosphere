@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:podosphere/game_by_league_details.dart';
+import 'package:intl/intl.dart';
 
 class FixturesLeague extends StatelessWidget {
   final String leagueName;
@@ -18,11 +19,12 @@ class FixturesLeague extends StatelessWidget {
       required this.flag});
 
   String formatTime(String dateTimeString) {
-    final parsedDate = DateTime.parse(dateTimeString);
-    final formattedTime =
-        '${parsedDate.hour.toString().padLeft(2, '0')}:${parsedDate.minute.toString().padLeft(2, '0')}';
-    return formattedTime;
-  }
+  final parsedDate = DateTime.parse(dateTimeString);
+  final localDate = parsedDate.toLocal();
+  
+  final formattedTime = DateFormat.Hm().format(localDate);
+  return formattedTime;
+}
 
   @override
   Widget build(BuildContext context) {
