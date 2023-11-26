@@ -72,20 +72,63 @@ class _StandingsState extends State<Standings> {
           decoration: BoxDecoration(
               color: const Color(0xFF333333),
               borderRadius: BorderRadius.circular(10.0)),
-          child: ListView.builder(
-            itemCount: standingsData.length,
-            itemBuilder: (context, index) {
-              final teamData = standingsData[index];
-              return StandingsItem(
-                teamData: teamData,
-                season: widget.season,
-              );
-            },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(width: 19,),
+                  Flexible(flex: 1, fit: FlexFit.tight,child: Text('#', style: TextStyle(color: Colors.white),),),
+                  Flexible(flex: 1,fit: FlexFit.tight,child: SizedBox(),),
+                  SizedBox(width: 5,),
+                  Flexible(flex: 6,fit: FlexFit.tight,child: Text('Team', style: TextStyle(color: Colors.white),),),
+                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GP', style: TextStyle(color: Colors.white),),),
+                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GW', style: TextStyle(color: Colors.white),),),
+                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GD', style: TextStyle(color: Colors.white),),),
+                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GL', style: TextStyle(color: Colors.white),),),
+                  Flexible(flex: 2,fit: FlexFit.tight,child: Text('Points', style: TextStyle(color: Colors.white),),),
+                ],
+              ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: standingsData.length,
+                    itemBuilder: (context, index) {
+                      final teamData = standingsData[index];
+                      return StandingsItem(
+                        teamData: teamData,
+                        season: widget.season,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+Widget loadImage(String url) {
+  int retryCount = 0;
+  const int maxRetries = 2;
+
+  return Image.network(
+    url,
+    width: 25,
+    height: 25,
+    errorBuilder: (context, error, stackTrace) {
+      if (retryCount < maxRetries) {
+        retryCount++;
+        return loadImage(url); // Retry loading the image
+      } else {
+        return const SizedBox(); // Return an empty SizedBox after max retries
+      }
+    },
+  );
 }
 
 class StandingsItem extends StatelessWidget {
@@ -111,52 +154,62 @@ class StandingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final teamName = teamData['team']['name'];
+    final logo = teamData['team']['logo'];
+    final rank = teamData['rank'];
     final points = teamData['points'];
     final goalsFor = teamData['all']['goals']['for'];
     final goalsAgainst = teamData['all']['goals']['against'];
     final teamId = teamData['team']['id'];
     final form = teamData['form'];
-    //final gamesPlayed = teamData['all']['played'];
+    final gamesPlayed = teamData['all']['played'];
     final gamesWon = teamData['all']['win'];
     final gamesDraw = teamData['all']['draw'];
     final gamesLost = teamData['all']['lose'];
 
     return GestureDetector(
-      onTap: () {
+      onDoubleTap: () {
         navigateToTeamDetails(context, teamId, teamName);
       },
       child: Column(
         children: [
-          ListTile(
-            leading: Image.network(
-              teamData['team']['logo'],
-              height: 50,
-              width: 50,
+          ExpansionTile(
+            
+            title: Row(
+              children: [
+                Flexible(flex: 1, fit: FlexFit.tight,child: Text('${rank}', style: TextStyle(color: Colors.white),),),
+                Flexible(flex: 1,fit: FlexFit.tight,child: loadImage(logo),),
+                SizedBox(width: 5,),
+                Flexible(flex: 6,fit: FlexFit.tight,child: Text('${teamName}', style: TextStyle(color: Colors.white),),),
+                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesPlayed}', style: TextStyle(color: Colors.white),),),
+                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesWon}', style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),),
+                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesDraw}', style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),),
+                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesLost}', style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),),
+                
+              ],
             ),
-            title: Text('$teamName ($gamesWon/$gamesDraw/$gamesLost)',
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-            subtitle: Row(
+            trailing: Text('$points', style: TextStyle(color: Colors.white,fontSize: 17 ,fontWeight: FontWeight.bold),),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'GF: $goalsFor - GA: $goalsAgainst',
                   style: TextStyle(color: Colors.white),
                 ),
                 const SizedBox(width: 10), // Adjust spacing if needed
-                FormDisplay(form: form),
+                Row(
+                  children: [
+                    Text('Form: ', style: TextStyle(color: Colors.white),),
+                    FormDisplay(form: form),
+                  ],
+                ),
               ],
             ),
-            trailing: Text(
-              '$points',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
+            ],
             ),
-          ),
         ],
       ),
-    );
+      );
   }
 }
 
