@@ -1,15 +1,255 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:podosphere/team_profile_search.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Favorites extends StatefulWidget {
-  const Favorites({super.key});
+  const Favorites({Key? key}) : super(key: key);
 
   @override
   State<Favorites> createState() => _FavoritesState();
 }
 
 class _FavoritesState extends State<Favorites> {
-  bool isFavorite = false;
-  
+  final TextEditingController _leagueIdController = TextEditingController();
+  List<String> _savedLeagueIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLeagueIds();
+  }
+
+  Future<void> _loadSavedLeagueIds() async {
+    final savedIds = await FavoritesManager.getFavoriteLeagueIds();
+    setState(() {
+      _savedLeagueIds = savedIds;
+    });
+  }
+
+  Future<void> _addToFavorites() async {
+    final leagueId = _leagueIdController.text;
+    await FavoritesManager.addToFavoriteLeagues(leagueId);
+    _leagueIdController.clear();
+    await _loadSavedLeagueIds();
+  }
+
+  Future<List<dynamic>> _searchTeams(String query) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://api-football-v1.p.rapidapi.com/v3/teams?search=$query'),
+      headers: {
+        'x-rapidapi-key': '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
+        'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
+        'useQueryString': 'true',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      return jsonData['response'];
+    } else {
+      throw Exception('Failed to load teams');
+    }
+  }
+
+  Future<List<dynamic>> _searchLeagues(String query) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://api-football-v1.p.rapidapi.com/v3/leagues?search=$query'),
+      headers: {
+        'x-rapidapi-key': '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
+        'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
+        'useQueryString': 'true',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      return jsonData['response'];
+    } else {
+      throw Exception('Failed to load leagues');
+    }
+  }
+
+  Widget loadImage(String url) {
+    int retryCount = 0;
+    const int maxRetries = 2;
+
+    return Image.network(
+      url,
+      width: 30,
+      height: 30,
+      errorBuilder: (context, error, stackTrace) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          return loadImage(url); // Retry loading the image
+        } else {
+          return const SizedBox(); // Return an empty SizedBox after max retries
+        }
+      },
+    );
+  }
+
+  Future<void> _showSearchDialog() async {
+    String? selectedType;
+    String? searchText;
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Search Teams/Leagues'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      DropdownButton<String>(
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: 'teams',
+                            child: Text('Search Teams'),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'leagues',
+                            child: Text('Search Leagues'),
+                          ),
+                        ],
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedType = value;
+                          });
+                        },
+                        value: selectedType,
+                        hint: Text('Select Type'),
+                      ),
+                      Expanded(
+                        child: TextField(
+                          onChanged: (String value) {
+                            searchText = value;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Enter search query',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (selectedType != null && searchText != null) {
+                        List<dynamic> results = [];
+                        if (selectedType == 'teams') {
+                          results = await _searchTeams(searchText!);
+                          _showTeamResultsDialog(context, results);
+                        } else if (selectedType == 'leagues') {
+                          results = await _searchLeagues(searchText!);
+                          _showLeagueResultsDialog(context, results);
+                        }
+                      }
+                    },
+                    child: Text('Search'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showTeamResultsDialog(BuildContext context, List<dynamic> teams) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Search Results - Teams'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: teams.length,
+              itemBuilder: (BuildContext context, int index) {
+                final teamName = teams[index]['team']['name'];
+                final teamLogo = teams[index]['team']['logo'];
+                final teamId = teams[index]['team']['id'];
+
+                return ListTile(
+                  title: Row(
+                    children: [
+                      loadImage(teamLogo),
+                      Expanded(
+                        child: Text(
+                          teamName,
+                          softWrap: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context); // Close the current dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          // Set dialog properties here
+                          child: TeamProfileSearch(
+                            teamId: teamId,
+                            logo: teamLogo,
+                            teamName: teamName,
+                            
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showLeagueResultsDialog(BuildContext context, List<dynamic> leagues) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Search Results - Leagues'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: leagues.length,
+              itemBuilder: (BuildContext context, int index) {
+                final leagueName = leagues[index]['league']['name'];
+                final leagueLogo = leagues[index]['league']['logo'];
+                return ListTile(
+                  title: Row(
+                    children: [
+                      loadImage(leagueLogo),
+                      Text(leagueName),
+                    ],
+                  ),
+                  onTap: () {
+                    // Handle tap on the searched league
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,76 +257,98 @@ class _FavoritesState extends State<Favorites> {
         title: const Text('Favorites'),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearchDelegate(), // Replace with your custom search delegate
-              );
-            },
-          ),
-          IconButton(
-            icon: isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-            onPressed: () {
-              setState(() {
-                isFavorite = !isFavorite;
-              });
-              // Implement your logic to add/remove from favorites here
-            },
-          ),
+            onPressed: _showSearchDialog,
+            icon: const Icon(Icons.search_sharp),
+          )
         ],
       ),
       body: Center(
-        child: Column(
-          children: [
-            Text("Favorites under construction", style: TextStyle(color: Colors.red, fontSize: 25),),
-            SizedBox(height: 20,),
-            Container(child: Image.network('https://media.tenor.com/YgsRuQaF7UMAAAAC/jackhanmer-construction.gif')),
-            
-
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _leagueIdController,
+                decoration: InputDecoration(
+                  labelText: 'Enter League ID',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _addToFavorites,
+                child: Text('Add to Favorites'),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final savedIds =
+                      await FavoritesManager.getFavoriteLeagueIds();
+                  setState(() {
+                    _savedLeagueIds = savedIds;
+                  });
+                },
+                child: Text('Display Saved League IDs'),
+              ),
+              SizedBox(height: 20),
+              if (_savedLeagueIds.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Saved League IDs:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    ..._savedLeagueIds
+                        .map(
+                          (id) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(id),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  await FavoritesManager
+                                      .removeFromFavoriteLeagues(id);
+                                  await _loadSavedLeagueIds();
+                                },
+                                child: Text('Remove'),
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class CustomSearchDelegate extends SearchDelegate<String> {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      ),
-    ];
+class FavoritesManager {
+  static const _leagueKey = 'favorite_league_ids';
+
+  static Future<List<String>> getFavoriteLeagueIds() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteIds = prefs.getStringList(_leagueKey) ?? [];
+    return favoriteIds;
   }
 
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, '');
-      },
-    );
+  static Future<void> addToFavoriteLeagues(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteIds = prefs.getStringList(_leagueKey) ?? [];
+    favoriteIds.add(id);
+    await prefs.setStringList(_leagueKey, favoriteIds);
   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    // Implement search results view
-    return Center(
-      child: Text('Search results for: $query'),
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // Implement search suggestions view
-    return Center(
-      child: Text('Search suggestions for: $query'),
-    );
+  static Future<void> removeFromFavoriteLeagues(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteIds = prefs.getStringList(_leagueKey) ?? [];
+    favoriteIds.remove(id);
+    await prefs.setStringList(_leagueKey, favoriteIds);
   }
 }

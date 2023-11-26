@@ -26,6 +26,26 @@ class FixturesLeague extends StatelessWidget {
   return formattedTime;
 }
 
+  Widget loadImage(String url) {
+  int retryCount = 0;
+  const int maxRetries = 2;
+
+  return Image.network(
+    url,
+    width: 30,
+    height: 30,
+    errorBuilder: (context, error, stackTrace) {
+      if (retryCount < maxRetries) {
+        retryCount++;
+        return loadImage(url); // Retry loading the image
+      } else {
+        return const SizedBox(); // Return an empty SizedBox after max retries
+      }
+    },
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     final fixturesForLeague = leagueData
@@ -236,7 +256,7 @@ class FixturesLeague extends StatelessWidget {
                   if (shortStatus == 'PST') {
                     return TableRow(
                       children: [
-                        Image.network(homeLogo, width: 30, height: 30),
+                        loadImage(homeLogo),
                         Text(
                           homeTeam,
                           style: const TextStyle(
@@ -265,13 +285,13 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Image.network(awayLogo, width: 30, height: 30),
+                        loadImage(awayLogo),
                       ],
                     );
                   } else if (shortStatus == 'CANC') {
                     return TableRow(
                       children: [
-                        Image.network(homeLogo, width: 30, height: 30),
+                        loadImage(homeLogo),
                         Text(
                           homeTeam,
                           style: const TextStyle(
@@ -300,13 +320,13 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Image.network(awayLogo, width: 30, height: 30),
+                        loadImage(awayLogo),
                       ],
                     );
                   } else if (shortStatus == 'NS') {
                     return TableRow(
                       children: [
-                        Image.network(homeLogo, width: 30, height: 30),
+                        loadImage(homeLogo),
                         Text(
                           homeTeam,
                           style: const TextStyle(
@@ -330,13 +350,13 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Image.network(awayLogo, width: 30, height: 30),
+                        loadImage(awayLogo),
                       ],
                     );
                   } else if (shortStatus != 'FT') {
                     return TableRow(
                       children: [
-                        Image.network(homeLogo, width: 30, height: 30),
+                        loadImage(homeLogo),
                         Text(
                           homeTeam,
                           style: const TextStyle(
@@ -365,13 +385,13 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Image.network(awayLogo, width: 30, height: 30),
+                        loadImage(awayLogo),
                       ],
                     );
                   } else {
                     return TableRow(
                       children: [
-                        Image.network(homeLogo, width: 30, height: 30),
+                        loadImage(homeLogo),
                         Text(
                           homeTeam,
                           style: const TextStyle(
@@ -401,7 +421,7 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Image.network(awayLogo, width: 30, height: 30),
+                        loadImage(awayLogo),
                       ],
                     );
                   }

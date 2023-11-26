@@ -138,7 +138,7 @@ class StandingsItem extends StatelessWidget {
             ),
             title: Text('$teamName (${gamesWon.toString()}/${gamesDraw.toString()}/${gamesLost.toString()})',
                 style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
+                    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
             subtitle: Row(
               children: [
                 Text(

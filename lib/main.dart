@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:podosphere/favorites.dart';
-import 'package:podosphere/homepage.dart';
+import 'package:podosphere/todaygames.dart';
 import 'package:podosphere/leagues.dart';
 import 'package:podosphere/news.dart';
 
@@ -34,7 +34,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
       context,
       controller: PersistentTabController(initialIndex: _currentIndex),
       screens: const [
-        HomePage(),
+        TodayGames(),
         Leagues(),
         Favorites(),
         News(),

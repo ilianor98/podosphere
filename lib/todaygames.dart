@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:podosphere/games_by_league.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key});
+class TodayGames extends StatefulWidget {
+  const TodayGames({Key? key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TodayGames> createState() => _TodayGamesState();
 }
 
 class LeagueInfo {
@@ -87,7 +87,7 @@ final List<LeagueInfo> leagueList = [
   // Add more leagues here
 ];
 
-class _HomePageState extends State<HomePage> {
+class _TodayGamesState extends State<TodayGames> {
   List<Map<String, dynamic>> fixtures = [];
 
   @override
