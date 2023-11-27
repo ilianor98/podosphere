@@ -50,7 +50,7 @@ class TodayDetails extends StatelessWidget {
         .toList();
 
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
         title: Text(
           '$leagueName Fixtures',
@@ -58,7 +58,7 @@ class TodayDetails extends StatelessWidget {
           style: const TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: Center(
@@ -71,7 +71,7 @@ class TodayDetails extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF333333),
+                      color: Colors.grey.shade700,
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: SizedBox(

@@ -98,32 +98,34 @@ class _TodayGamesState extends State<TodayGames> {
 
   Future<void> fetchFixtures() async {
     String _formatDate(int value) {
-  return value.toString().padLeft(2, '0');
-}
+      return value.toString().padLeft(2, '0');
+    }
 
     final DateTime now = DateTime.now();
-    final String todayDate = '${now.year}-${_formatDate(now.month)}-${_formatDate(now.day)}';
+    final String todayDate =
+        '${now.year}-${_formatDate(now.month)}-${_formatDate(now.day)}';
 
-    try{
-    final response = await http.get(
-      Uri.parse('https://api-football-v1.p.rapidapi.com/v3/fixtures?date=$todayDate&timezone=Europe/Athens'),
-      headers: {
-        'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
-        'x-rapidapi-key': '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
-      },
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://api-football-v1.p.rapidapi.com/v3/fixtures?date=$todayDate&timezone=Europe/Athens'),
+        headers: {
+          'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
+          'x-rapidapi-key':
+              '532fd60bd5msh6da995865b23f7fp107e5cjsn25f04e7e813e',
+        },
+      );
 
-    if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data != null &&
             data['response'] is List &&
             data['response'].isNotEmpty) {
-      final tempFixtures = data['response'];
-      setState(() {
+          final tempFixtures = data['response'];
+          setState(() {
             fixtures = List<Map<String, dynamic>>.from(tempFixtures);
           });
-
-    } else  {
+        } else {
           throw Exception('Invalid response format');
         }
       } else {
@@ -141,16 +143,21 @@ class _TodayGamesState extends State<TodayGames> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        title: const Text('Today\'s Fixtures', textAlign: TextAlign.center, style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),),
-        backgroundColor: const Color(0xFF333333),
+        title: const Text(
+          'Today\'s Fixtures',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
+        ),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         color: Colors.green,
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Center(

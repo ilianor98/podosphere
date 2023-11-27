@@ -19,32 +19,31 @@ class FixturesLeague extends StatelessWidget {
       required this.flag});
 
   String formatTime(String dateTimeString) {
-  final parsedDate = DateTime.parse(dateTimeString);
-  final localDate = parsedDate.toLocal();
-  
-  final formattedTime = DateFormat.Hm().format(localDate);
-  return formattedTime;
-}
+    final parsedDate = DateTime.parse(dateTimeString);
+    final localDate = parsedDate.toLocal();
+
+    final formattedTime = DateFormat.Hm().format(localDate);
+    return formattedTime;
+  }
 
   Widget loadImage(String url) {
-  int retryCount = 0;
-  const int maxRetries = 2;
+    int retryCount = 0;
+    const int maxRetries = 2;
 
-  return Image.network(
-    url,
-    width: 30,
-    height: 30,
-    errorBuilder: (context, error, stackTrace) {
-      if (retryCount < maxRetries) {
-        retryCount++;
-        return loadImage(url); // Retry loading the image
-      } else {
-        return const SizedBox(); // Return an empty SizedBox after max retries
-      }
-    },
-  );
-}
-
+    return Image.network(
+      url,
+      width: 30,
+      height: 30,
+      errorBuilder: (context, error, stackTrace) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          return loadImage(url); // Retry loading the image
+        } else {
+          return const SizedBox(); // Return an empty SizedBox after max retries
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,7 @@ class FixturesLeague extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Column(
@@ -161,7 +160,7 @@ class FixturesLeague extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: const Color(0xFF333333),
+          color: Colors.grey.shade700,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Column(
@@ -335,7 +334,6 @@ class FixturesLeague extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            
                             Text(
                               time,
                               style: const TextStyle(
@@ -371,11 +369,19 @@ class FixturesLeague extends StatelessWidget {
                                   fontSize: 14, color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(width: 3,),
+                            SizedBox(
+                              width: 3,
+                            ),
                             Container(
                               height: 16,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.green),
-                              child: Center(child: Text(timeElapsed.toString(), style: TextStyle(color: Colors.white), ),),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.green),
+                              child: Center(
+                                child: Text(
+                                  timeElapsed.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             )
                           ],
                         ),
@@ -406,7 +412,6 @@ class FixturesLeague extends StatelessWidget {
                                   fontSize: 14, color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
-                            
                             Text(
                               shortStatus,
                               style: const TextStyle(
