@@ -54,7 +54,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
         title: const Text(
           'Player Details',
@@ -62,7 +62,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
           style: TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: player.isNotEmpty
@@ -74,7 +74,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFF333333),
+                        color: Colors.grey.shade700,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       padding: const EdgeInsets.all(10.0),
@@ -213,7 +213,7 @@ class PlayerLeagueStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF333333),
+        color: Colors.grey.shade700,
         borderRadius: BorderRadius.circular(10.0),
       ),
       padding: const EdgeInsets.all(10.0),

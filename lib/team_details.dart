@@ -79,17 +79,17 @@ class _TeamDetailsPageState extends State<TeamDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF333333),
-        title: Text('${widget.teamName} Match History', style: TextStyle(color: Colors.green),),
+        backgroundColor: Colors.grey.shade700,
+        title: Text('${widget.teamName} Match History', style: TextStyle(color: Colors.white),),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
           decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(10.0)),
           child: matches.isEmpty
               ? Center(child: CircularProgressIndicator())
@@ -197,12 +197,12 @@ class FixtureItem extends StatelessWidget {
                       isNullScore ? matchDate : '$homeGoals - $awayGoals',
                       style: TextStyle(fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: isNullScore ? Colors.grey : Colors.white,
+                        color: isNullScore ? Colors.grey.shade300 : Colors.white,
                       ),textAlign: TextAlign.center,
                     ),
                     Text(
                       isNullScore ? matchDate : '$shortstatus',
-                      style: TextStyle(color: Colors.grey, fontSize: 10),textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey.shade300, fontSize: 10),textAlign: TextAlign.center,
                     ),
                     if (!isNullScore)
                       Column(
@@ -210,14 +210,14 @@ class FixtureItem extends StatelessWidget {
                           SizedBox(height: 4),
                           Text(
                             matchDate,
-                            style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey.shade300,),textAlign: TextAlign.center,
                           ),
                         ],
                       ),
                     
                     Text(
                       matchData['league']['name'],
-                      style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey.shade300,),textAlign: TextAlign.center,
                     ),
                   ],
                 ),

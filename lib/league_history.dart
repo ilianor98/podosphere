@@ -60,32 +60,35 @@ class _LeagueHistoryState extends State<LeagueHistory> {
       backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
         backgroundColor:
-            const Color(0xFF333333), // Set the app bar background color
+            Colors.grey.shade700, // Set the app bar background color
         leading: IconButton(
           onPressed: () {
             // Handle going back to the homepage
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.blue),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: Row(
           children: [
-            Image.network(
-              widget.logo,
-              width: 50, // Adjust the width as needed
-              height: 50, // Adjust the height as needed
+            Container(
+              color: Colors.white,
+              child: Image.asset(
+                'assets/images/${widget.logo}',
+                width: 50, // Adjust the width as needed
+                height: 50, // Adjust the height as needed
+              ),
             ),
             SizedBox(width: 16.0),
             Text(
               widget.leagueName,
               style: TextStyle(
                 fontSize: 24.0,
-                color: Colors.blue,
+                color: Colors.white,
               ),
             ),
             SizedBox(width: 16.0),
-            SvgPicture.network(
-              widget.flag,
+            SvgPicture.asset(
+              'assets/images/${widget.flag}',
               width: 50, // Adjust the width as needed
               height: 50, // Adjust the height as needed
             ),
@@ -113,15 +116,15 @@ class _LeagueHistoryState extends State<LeagueHistory> {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.shade700,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: ListTile(
                 title: Center(
                   child: Text(
                     '${season['year']}',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Colors.white,
                       fontSize: 24,
                     ),
                   ),

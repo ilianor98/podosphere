@@ -74,7 +74,7 @@ class _StandingsWidgetState extends State<StandingsWidget> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: standingsData.isEmpty
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(child: Text('No available Data', style: TextStyle(color: Colors.white, fontSize: 14),))
                   : SingleChildScrollView(
                       child: Column(
                         children: [

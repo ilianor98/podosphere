@@ -59,18 +59,18 @@ class _StandingsState extends State<Standings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF333333), // Dark mode background color
+        backgroundColor: Colors.grey.shade700, // Dark mode background color
         title:
-            Text('${widget.champName}', style: TextStyle(color: Colors.green)),
+            Text('${widget.champName}', style: TextStyle(color: Colors.white)),
         centerTitle: true, // Center-align the title
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
           decoration: BoxDecoration(
-              color: const Color(0xFF333333),
+              color: Colors.grey.shade700,
               borderRadius: BorderRadius.circular(10.0)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),

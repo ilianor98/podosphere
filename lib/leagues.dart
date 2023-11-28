@@ -11,13 +11,13 @@ class Leagues extends StatefulWidget {
 
 class LeagueInfo {
   final String name;
-  final String logo;
+  final String leagueLogo;
   final int id;
   final String flag;
 
   LeagueInfo(
       {required this.name,
-      required this.logo,
+      required this.leagueLogo,
       required this.id,
       required this.flag});
 }
@@ -25,61 +25,61 @@ class LeagueInfo {
 final List<LeagueInfo> leagueList = [
   LeagueInfo(
     name: 'Premier League',
-    logo: 'logo_39.png',
+    leagueLogo: 'logo_39.png',
     id: 39,
     flag: 'flag_gb.svg',
   ),
   LeagueInfo(
     name: 'La Liga',
-    logo: 'logo_140.png',
+    leagueLogo: 'logo_140.png',
     id: 140,
     flag: 'flag_es.svg',
   ),
   LeagueInfo(
     name: 'Bundesliga',
-    logo: 'logo_78.png',
+    leagueLogo: 'logo_78.png',
     id: 78,
     flag: 'flag_de.svg',
   ),
   LeagueInfo(
     name: 'Superleague 1',
-    logo: 'logo_197.png',
+    leagueLogo: 'logo_197.png',
     id: 197,
     flag: 'flag_gr.svg',
   ),
   LeagueInfo(
     name: 'Ligue 1',
-    logo: 'logo_61.png',
+    leagueLogo: 'logo_61.png',
     id: 61,
     flag: 'flag_fr.svg',
   ),
   LeagueInfo(
     name: 'Serie A',
-    logo: 'logo_135.png',
+    leagueLogo: 'logo_135.png',
     id: 135,
     flag: 'flag_it.svg',
   ),
   LeagueInfo(
     name: 'Eredivisie',
-    logo: 'logo_88.png',
+    leagueLogo: 'logo_88.png',
     id: 88,
     flag: 'flag_nl.svg',
   ),
   LeagueInfo(
     name: 'Jupiler Pro',
-    logo: 'logo_144.png',
+    leagueLogo: 'logo_144.png',
     id: 144,
     flag: 'flag_be.svg',
   ),
   LeagueInfo(
     name: 'UEFA Champions\nLeague',
-    logo: 'logo_2.png',
+    leagueLogo: 'logo_2.png',
     id: 2,
     flag: 'null',
   ),
   LeagueInfo(
     name: 'UEFA Europa\nLeague',
-    logo: 'logo_3.png',
+    leagueLogo: 'logo_3.png',
     id: 3,
     flag: 'null',
   ),
@@ -90,14 +90,14 @@ class _LeaguesState extends State<Leagues> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Colors.green,
+      backgroundColor:  const Color(0xFF333333),
       appBar: AppBar(
         title: const Text(
           'LEAGUES',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: Align(
@@ -122,7 +122,7 @@ class _LeaguesState extends State<Leagues> {
                                 builder: (context) => LeagueOptions(
                                   leagueId: leagueInfo.id,
                                   leagueName: leagueInfo.name,
-                                  logo: leagueInfo.logo,
+                                  logo: leagueInfo.leagueLogo,
                                   flag: leagueInfo.flag,
                                 ),
                               ),
@@ -133,7 +133,7 @@ class _LeaguesState extends State<Leagues> {
                             child: Container(
                               padding: EdgeInsets.all(20.0),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF333333),
+                                color: Colors.grey.shade700,
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Row(
@@ -143,7 +143,7 @@ class _LeaguesState extends State<Leagues> {
                                   Container(
                                     color: Colors.white,
                                     child: Image.asset(
-                                      'assets/images/${leagueInfo.logo}',
+                                      'assets/images/${leagueInfo.leagueLogo}',
                                       width: 50, // Adjust the width as needed
                                       height: 50, // Adjust the height as needed
                                     ),
@@ -181,7 +181,7 @@ class _LeaguesState extends State<Leagues> {
                                 builder: (context) => LeagueOptions(
                                   leagueId: leagueInfo.id,
                                   leagueName: leagueInfo.name,
-                                  logo: leagueInfo.logo,
+                                  logo: leagueInfo.leagueLogo,
                                   flag: leagueInfo.flag,
                                 ),
                               ),
@@ -192,7 +192,7 @@ class _LeaguesState extends State<Leagues> {
                             child: Container(
                               padding: EdgeInsets.all(20.0),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF333333),
+                                color: Colors.grey.shade700,
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Row(
@@ -202,7 +202,7 @@ class _LeaguesState extends State<Leagues> {
                                   Container(
                                     color: Colors.white,
                                     child: Image.asset(
-                                      'assets/images/${leagueInfo.logo}',
+                                      'assets/images/${leagueInfo.leagueLogo}',
                                       width: 50, // Adjust the width as needed
                                       height: 50, // Adjust the height as needed
                                     ),
@@ -223,7 +223,7 @@ class _LeaguesState extends State<Leagues> {
                                   Container(
                                     color: Colors.white,
                                     child: Image.asset(
-                                      'assets/images/${leagueInfo.logo}',
+                                      'assets/images/${leagueInfo.leagueLogo}',
                                       width: 50, // Adjust the width as needed
                                       height: 50, // Adjust the height as needed
                                     ),

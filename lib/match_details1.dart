@@ -70,7 +70,7 @@ class _MatchDetailsTestState extends State<MatchDetailsTest> {
     final scoreAway = widget.awayScore.toString();
     final shortStatus = widget.shortStatus.toString();
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
         title: Text(
           'Match Details',
@@ -78,17 +78,17 @@ class _MatchDetailsTestState extends State<MatchDetailsTest> {
           style: const TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Column(

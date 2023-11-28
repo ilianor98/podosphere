@@ -21,16 +21,16 @@ class LeagueOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
         backgroundColor:
-            const Color(0xFF333333), // Set the app bar background color
+            Colors.grey.shade700, // Set the app bar background color
         leading: IconButton(
           onPressed: () {
             // Handle going back to the homepage
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.green),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: Row(
           children: [
@@ -47,7 +47,7 @@ class LeagueOptions extends StatelessWidget {
               '$leagueName',
               style: TextStyle(
                 fontSize: 24.0,
-                color: Colors.green,
+                color: Colors.white,
               ),
             ),
             SizedBox(width: 16.0),
@@ -73,7 +73,7 @@ class LeagueOptions extends StatelessWidget {
               
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: GestureDetector(
@@ -107,7 +107,7 @@ class LeagueOptions extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: GestureDetector(
@@ -142,7 +142,7 @@ class LeagueOptions extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: GestureDetector(
@@ -178,7 +178,7 @@ class LeagueOptions extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF333333),
+                color: Colors.grey.shade700,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: GestureDetector(

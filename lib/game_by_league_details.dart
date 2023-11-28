@@ -10,16 +10,13 @@ class TodayDetails extends StatelessWidget {
   final String leagueName;
   final List<Map<String, dynamic>> leagueData;
   final leagueId;
-  final String logo;
-  final String flag;
 
   const TodayDetails(
       {super.key,
       required this.leagueName,
       required this.leagueData,
       required this.leagueId,
-      required this.logo,
-      required this.flag});
+      });
 
   String formatTime(String dateTimeString) {
     final parsedDate = DateTime.parse(dateTimeString);

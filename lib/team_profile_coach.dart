@@ -72,7 +72,7 @@ class _TeamProfileCoachState extends State<TeamProfileCoach> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF333333),
+          color: Colors.grey.shade700,
           borderRadius: BorderRadius.circular(10.0),
         ),
         padding: const EdgeInsets.all(10.0),

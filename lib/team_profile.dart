@@ -12,7 +12,12 @@ class TeamProfile extends StatefulWidget {
   final String teamName;
   final String flag;
 
-  const TeamProfile({super.key, required this.teamId, required this.logo, required this.teamName, required this.flag});
+  const TeamProfile(
+      {super.key,
+      required this.teamId,
+      required this.logo,
+      required this.teamName,
+      required this.flag});
 
   @override
   State<TeamProfile> createState() => _TeamProfileState();
@@ -62,16 +67,19 @@ class _TeamProfileState extends State<TeamProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.green),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
-        title: Text('${widget.teamName} Profile', style: TextStyle(color: Colors.green),),
+        title: Text(
+          '${widget.teamName} Profile',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -81,23 +89,31 @@ class _TeamProfileState extends State<TeamProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              
               Container(
-                child: TeamProfileBanner(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
+                  child: TeamProfileBanner(
+                teamName: widget.teamName,
+                flag: widget.flag,
+                logo: widget.logo,
+                profileData: profile,
+              )),
+              SizedBox(
+                height: 15,
               ),
-              SizedBox(height: 15,),
               Container(
-                child: TeamProfileVenue(teamName: widget.teamName, flag: widget.flag, logo: widget.logo, profileData: profile,)
+                  child: TeamProfileVenue(
+                teamName: widget.teamName,
+                flag: widget.flag,
+                logo: widget.logo,
+                profileData: profile,
+              )),
+              SizedBox(
+                height: 15,
               ),
-              SizedBox(height: 15,),
-              Container(
-                child: TeamProfileCoach(teamId: widget.teamId)
+              Container(child: TeamProfileCoach(teamId: widget.teamId)),
+              SizedBox(
+                height: 15,
               ),
-              SizedBox(height: 15,),
-              Container(
-                child: TeamProfileSquad(teamId: widget.teamId)
-              ),
-              
+              Container(child: TeamProfileSquad(teamId: widget.teamId)),
             ],
           ),
         ),
@@ -105,6 +121,3 @@ class _TeamProfileState extends State<TeamProfile> {
     );
   }
 }
-  
-
-  

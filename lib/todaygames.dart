@@ -10,7 +10,7 @@ class TodayGames extends StatefulWidget {
   State<TodayGames> createState() => _TodayGamesState();
 }
 
-class LeagueInfo {
+/*class LeagueInfo {
   final String name;
   final String logo;
   final int id;
@@ -85,10 +85,12 @@ final List<LeagueInfo> leagueList = [
     flag: 'null',
   ),
   // Add more leagues here
-];
+];*/
 
 class _TodayGamesState extends State<TodayGames> {
   List<Map<String, dynamic>> fixtures = [];
+  List<Map<String, dynamic>> apiLeagues =
+      []; // Updated list to hold league information
 
   @override
   void initState() {
@@ -124,6 +126,7 @@ class _TodayGamesState extends State<TodayGames> {
           final tempFixtures = data['response'];
           setState(() {
             fixtures = List<Map<String, dynamic>>.from(tempFixtures);
+            updateLeagueList(fixtures); // Update the leagueList
           });
         } else {
           throw Exception('Invalid response format');
@@ -133,6 +136,34 @@ class _TodayGamesState extends State<TodayGames> {
       }
     } catch (e) {
       print('Error: $e');
+    }
+  }
+
+  void updateLeagueList(List<Map<String, dynamic>> fixtures) {
+    for (final fixture in fixtures) {
+      final leagueId = fixture['league']['id'];
+      final leagueName = fixture['league']['name'];
+      final leagueLogo = fixture['league']['logo'];
+      final leagueFlag = fixture['league']['flag'];
+      final country = fixture['league']['country'];
+
+      final existingLeague = apiLeagues.firstWhere(
+        (league) => league['id'] == leagueId,
+        orElse: () => <String, dynamic>{}, // Returns an empty map if not found
+      );
+
+      if (existingLeague.isEmpty) {
+        // If league doesn't exist in the list, add it
+        setState(() {
+          apiLeagues.add({
+            'name': leagueName,
+            'logo': leagueLogo,
+            'id': leagueId,
+            'flag': leagueFlag,
+            'country': country,
+          });
+        });
+      }
     }
   }
 
@@ -156,7 +187,7 @@ class _TodayGamesState extends State<TodayGames> {
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
-        color: Colors.green,
+        color: Colors.white,
         backgroundColor: Colors.grey.shade700,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -165,15 +196,16 @@ class _TodayGamesState extends State<TodayGames> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: leagueList.map((league) {
+                children: apiLeagues.map((league) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FixturesLeague(
-                      leagueName: league.name,
+                      leagueName: league['name'],
                       leagueData: fixtures,
-                      leagueId: league.id,
-                      logo: league.logo,
-                      flag: league.flag,
+                      leagueId: league['id'],
+                      logo: league['logo'],
+                      flag: league['flag'].toString(),
+                      country: league['country'].toString(),
                     ),
                   );
                 }).toList(),

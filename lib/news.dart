@@ -54,7 +54,7 @@ class _NewsState extends State<News> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
         title: const Text(
           'News',
@@ -62,12 +62,12 @@ class _NewsState extends State<News> {
           style: TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: RefreshIndicator(
-        color: Colors.green,
-        backgroundColor: const Color(0xFF333333),
+        color: Colors.white,
+        backgroundColor: Colors.grey.shade700,
         onRefresh: _refreshData,
         child: ListView.builder(
           itemCount: articles.length,
@@ -97,7 +97,7 @@ class NewsItem extends StatelessWidget {
         DateFormat('dd/MM/yyyy HH:mm').format(publishedDateTime);
     // Use the 'article' data here to display individual news items
     return Card(
-      color: const Color(0xFF333333),
+      color: Colors.grey.shade700,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         title: Row(
@@ -106,7 +106,7 @@ class NewsItem extends StatelessWidget {
               height: 30,
               width: 30,
               decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.green),
+                  BoxDecoration(shape: BoxShape.circle, color: const Color(0xFF333333),),
               child: Text(
                 indexToShow.toString(),
                 style: TextStyle(color: Colors.white, fontSize: 20),
@@ -177,7 +177,7 @@ class WebViewScreen extends StatelessWidget {
           style: TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         centerTitle: true,
       ),
       body: InAppWebView(

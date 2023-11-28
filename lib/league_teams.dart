@@ -12,7 +12,11 @@ class LeagueTeams extends StatefulWidget {
   final String flag;
 
   LeagueTeams(
-      {required this.leagueId, required this.champName, required this.season, required this.flag, required this.logo});
+      {required this.leagueId,
+      required this.champName,
+      required this.season,
+      required this.flag,
+      required this.logo});
 
   @override
   _LeagueTeamsState createState() => _LeagueTeamsState();
@@ -62,14 +66,14 @@ class _LeagueTeamsState extends State<LeagueTeams> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF333333),
+        backgroundColor: Colors.grey.shade700,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.green),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: Row(
           children: [
@@ -86,7 +90,7 @@ class _LeagueTeamsState extends State<LeagueTeams> {
               '${widget.champName}',
               style: TextStyle(
                 fontSize: 24.0,
-                color: Colors.green,
+                color: Colors.white,
               ),
             ),
             SizedBox(width: 16.0),
@@ -113,7 +117,11 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TeamProfile(teamId: teamId, logo: team['team']['logo'], teamName: team['team']['name'], flag: widget.flag),
+                    builder: (context) => TeamProfile(
+                        teamId: teamId,
+                        logo: team['team']['logo'],
+                        teamName: team['team']['name'],
+                        flag: widget.flag),
                   ),
                 );
               },
@@ -121,7 +129,7 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                 margin: EdgeInsets.all(16.0),
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF333333),
+                  color: Colors.grey.shade700,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Row(
@@ -137,7 +145,8 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
-                      ), textAlign: TextAlign.center,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:podosphere/game_by_league_details.dart';
@@ -9,6 +11,7 @@ class FixturesLeague extends StatelessWidget {
   final leagueId;
   final String logo;
   final String flag;
+  final String country;
 
   const FixturesLeague(
       {super.key,
@@ -16,7 +19,8 @@ class FixturesLeague extends StatelessWidget {
       required this.leagueData,
       required this.leagueId,
       required this.logo,
-      required this.flag});
+      required this.flag,
+      required this.country});
 
   String formatTime(String dateTimeString) {
     final parsedDate = DateTime.parse(dateTimeString);
@@ -45,6 +49,34 @@ class FixturesLeague extends StatelessWidget {
     );
   }
 
+  Future<Widget> loadSvgImage(String url) async {
+    int retryCount = 0;
+    const int maxRetries = 3;
+
+    Completer<Widget> completer = Completer();
+
+    while (retryCount < maxRetries) {
+      try {
+        final svgData = await http.get(Uri.parse(url));
+        if (svgData.statusCode == 200) {
+          final widget = SvgPicture.string(
+            svgData.body,
+            width: 30,
+            height: 30,
+          );
+          completer.complete(widget);
+          return widget;
+        }
+      } catch (e) {
+        retryCount++;
+      }
+    }
+
+    completer.complete(
+        const SizedBox()); // Return an empty SizedBox after max retries
+    return completer.future;
+  }
+
   @override
   Widget build(BuildContext context) {
     final fixturesForLeague = leagueData
@@ -69,64 +101,59 @@ class FixturesLeague extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              color: Colors.white,
-                              child: Image.asset(
-                                'assets/images/$logo',
-                                width: 30,
-                                height: 30,
-                              ),
-                            ),
+                                color: Colors.white, child: loadImage(logo)),
                             SizedBox(
                               width: 16.0,
                             ),
-                            Text(leagueName,
-                                style: TextStyle(
-                                  fontSize: 24.0,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center),
+                            Expanded(
+                              child: Text(leagueName,
+                                  style: TextStyle(
+                                    fontSize: 24.0,
+                                    color: Colors.white,
+                                  ),
+                                  softWrap: true,
+                                  textAlign: TextAlign.center),
+                            ),
                             SizedBox(
                               width: 16.0,
                             ),
                             Container(
-                              color: Colors.white,
-                              child: Image.asset(
-                                'assets/images/$logo',
-                                width: 30,
-                                height: 30,
-                              ),
-                            ),
+                                color: Colors.white, child: loadImage(logo)),
                           ],
                         )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              color: Colors.white,
-                              child: Image.asset(
-                                'assets/images/$logo',
-                                width: 30,
-                                height: 30,
+                                color: Colors.white, child: loadImage(logo)),
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Expanded(
+                              child: Text(
+                                leagueName,
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.white,
+                                ),
+                                softWrap: true,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             SizedBox(
                               width: 16.0,
                             ),
-                            Text(
-                              leagueName,
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            SvgPicture.asset(
-                              'assets/images/$flag',
-                              width: 30,
-                              height: 30,
+                            FutureBuilder<Widget>(
+                              future: loadSvgImage(flag),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return snapshot.data ??
+                                      const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
+                                } else {
+                                  return const SizedBox(); // Return an empty SizedBox while loading
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -150,8 +177,6 @@ class FixturesLeague extends StatelessWidget {
             builder: (context) => TodayDetails(
               leagueId: leagueId,
               leagueName: leagueName,
-              logo: logo,
-              flag: flag,
               leagueData: leagueData,
             ),
           ),
@@ -170,63 +195,89 @@ class FixturesLeague extends StatelessWidget {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        color: Colors.white,
-                        child: Image.asset(
-                          'assets/images/$logo',
-                          width: 30,
-                          height: 30,
-                        ),
+                      Container(color: Colors.white, child: loadImage(logo)),
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      Expanded(
+                        child: Text(leagueName,
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              color: Colors.white,
+                            ),
+                            softWrap: true,
+                            textAlign: TextAlign.center),
                       ),
                       SizedBox(
                         width: 16.0,
                       ),
-                      Text(leagueName,
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: Image.asset(
-                          'assets/images/$logo',
-                          width: 30,
-                          height: 30,
-                        ),
-                      ),
+                      Container(color: Colors.white, child: loadImage(logo)),
                     ],
                   )
-                : Row(
+                :
+                leagueName == 'Cup' 
+                ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        color: Colors.white,
-                        child: Image.asset(
-                          'assets/images/$logo',
-                          width: 30,
-                          height: 30,
-                        ),
+                      Container(color: Colors.white, child: loadImage(logo)),
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      Expanded(
+                        child: Text('$leagueName ($country)',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              color: Colors.white,
+                            ),
+                            softWrap: true,
+                            textAlign: TextAlign.center),
                       ),
                       SizedBox(
                         width: 16.0,
                       ),
-                      Text(leagueName,
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center),
+                      FutureBuilder<Widget>(
+                        future: loadSvgImage(flag),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return snapshot.data ??
+                                const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
+                          } else {
+                            return const SizedBox(); // Return an empty SizedBox while loading
+                          }
+                        },
+                      ),
+                    ],
+                  ) :Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(color: Colors.white, child: loadImage(logo)),
                       SizedBox(
                         width: 16.0,
                       ),
-                      SvgPicture.asset(
-                        'assets/images/$flag',
-                        width: 30,
-                        height: 30,
+                      Expanded(
+                        child: Text(leagueName,
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              color: Colors.white,
+                            ),
+                            softWrap: true,
+                            textAlign: TextAlign.center),
+                      ),
+                      SizedBox(
+                        width: 16.0,
+                      ),
+                      FutureBuilder<Widget>(
+                        future: loadSvgImage(flag),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return snapshot.data ??
+                                const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
+                          } else {
+                            return const SizedBox(); // Return an empty SizedBox while loading
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -235,10 +286,11 @@ class FixturesLeague extends StatelessWidget {
               child: Table(
                 columnWidths: const {
                   0: FlexColumnWidth(2.0),
-                  1: FlexColumnWidth(3.0),
-                  2: FlexColumnWidth(2.0),
-                  3: FlexColumnWidth(3.0),
-                  4: FlexColumnWidth(2.0),
+                  1: FlexColumnWidth(2.0),
+                  2: FlexColumnWidth(3.0),
+                  3: FlexColumnWidth(2.0),
+                  4: FlexColumnWidth(3.0),
+                  5: FlexColumnWidth(2.0),
                 },
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: fixturesForLeague.map((fixture) {
@@ -251,10 +303,17 @@ class FixturesLeague extends StatelessWidget {
                   final time = formatTime(fixture['fixture']['date']);
                   final shortStatus = fixture['fixture']['status']['short'];
                   final timeElapsed = fixture['fixture']['status']['elapsed'];
+                  final penaltyScoreHome = fixture['score']['penalty']['home'];
+                  final penaltyScoreAway = fixture['score']['penalty']['away'];
 
                   if (shortStatus == 'PST') {
                     return TableRow(
                       children: [
+                        const Text(
+                          'PST',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                         loadImage(homeLogo),
                         Text(
                           homeTeam,
@@ -262,21 +321,15 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Column(
-                          children: [
-                            const Text(
-                              'PST',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              time,
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        Text(
+                          time,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              decoration: TextDecoration.lineThrough,
+                              decorationThickness: 2,
+                              decorationColor: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
                         Text(
                           awayTeam,
@@ -290,6 +343,11 @@ class FixturesLeague extends StatelessWidget {
                   } else if (shortStatus == 'CANC') {
                     return TableRow(
                       children: [
+                        const Text(
+                          'CANC',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                         loadImage(homeLogo),
                         Text(
                           homeTeam,
@@ -297,21 +355,49 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Column(
-                          children: [
-                            const Text(
-                              'CANC',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              time,
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        Text(
+                          time,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              decoration: TextDecoration.lineThrough,
+                              decorationThickness: 2,
+                              decorationColor: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          awayTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        loadImage(awayLogo),
+                      ],
+                    );
+                  } else if (shortStatus == 'TBD') {
+                    return TableRow(
+                      children: [
+                        const Text(
+                          'TBD',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        loadImage(homeLogo),
+                        Text(
+                          homeTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          time,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              decoration: TextDecoration.lineThrough,
+                              decorationThickness: 2,
+                              decorationColor: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
                         Text(
                           awayTeam,
@@ -325,6 +411,7 @@ class FixturesLeague extends StatelessWidget {
                   } else if (shortStatus == 'NS') {
                     return TableRow(
                       children: [
+                        const SizedBox(),
                         loadImage(homeLogo),
                         Text(
                           homeTeam,
@@ -338,6 +425,46 @@ class FixturesLeague extends StatelessWidget {
                               time,
                               style: const TextStyle(
                                   fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          awayTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        loadImage(awayLogo),
+                      ],
+                    );
+                  } else if (shortStatus == 'PEN') {
+                    return TableRow(
+                      children: [
+                        const Text(
+                          'PEN',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        loadImage(homeLogo),
+                        Text(
+                          homeTeam,
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '$scoreHome - $scoreAway',
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '$penaltyScoreHome - $penaltyScoreAway',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey.shade300),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -354,6 +481,12 @@ class FixturesLeague extends StatelessWidget {
                   } else if (shortStatus != 'FT') {
                     return TableRow(
                       children: [
+                        Text(
+                          '${timeElapsed.toString()}\'',
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                         loadImage(homeLogo),
                         Text(
                           homeTeam,
@@ -361,29 +494,17 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              '$scoreHome - $scoreAway',
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              width: 3,
-                            ),
-                            Container(
-                              height: 16,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.green),
-                              child: Center(
-                                child: Text(
-                                  timeElapsed.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ],
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: Colors.green,
+                          ),
+                          child: Text(
+                            '$scoreHome - $scoreAway',
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                         Text(
                           awayTeam,
@@ -397,6 +518,11 @@ class FixturesLeague extends StatelessWidget {
                   } else {
                     return TableRow(
                       children: [
+                        const Text(
+                          'FT',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                         loadImage(homeLogo),
                         Text(
                           homeTeam,
@@ -404,21 +530,11 @@ class FixturesLeague extends StatelessWidget {
                               fontSize: 12, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '$scoreHome - $scoreAway',
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              shortStatus,
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        Text(
+                          '$scoreHome - $scoreAway',
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
                         Text(
                           awayTeam,
