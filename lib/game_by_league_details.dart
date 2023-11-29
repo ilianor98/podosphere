@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:podosphere/match_details1.dart';
+import 'package:podosphere/pre_match_details.dart';
 import 'package:podosphere/standings_widget.dart';
 
 class TodayDetails extends StatelessWidget {
@@ -20,8 +22,9 @@ class TodayDetails extends StatelessWidget {
 
   String formatTime(String dateTimeString) {
     final parsedDate = DateTime.parse(dateTimeString);
-    final formattedTime =
-        '${parsedDate.hour.toString().padLeft(2, '0')}:${parsedDate.minute.toString().padLeft(2, '0')}';
+    final localDate = parsedDate.toLocal();
+
+    final formattedTime = DateFormat.Hm().format(localDate);
     return formattedTime;
   }
 
@@ -35,6 +38,23 @@ class TodayDetails extends StatelessWidget {
           homeScore: scoreHome,
           awayScore: scoreAway,
           shortStatus: shortStatus,
+        ),
+      ),
+    );
+  }
+
+  void navigateToPreMatchDetails(int fixtureId, String shortStatus, String homeTeam, String awayTeam, String homeLogo,String awayLogo,String time, BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PreMatchDetails(
+          fixtureId: fixtureId,
+          shortStatus: shortStatus,
+          homeTeam: homeTeam,
+          awayTeam: awayTeam,
+          homeLogo: homeLogo,
+          awayLogo: awayLogo,
+          time: time,
         ),
       ),
     );
@@ -91,240 +111,252 @@ class TodayDetails extends StatelessWidget {
                             final fixtureId = fixture['fixture']['id'];
 
                             if (shortStatus == 'PST') {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Flexible(
+                              return GestureDetector(
+                                onTap: () {navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam, awayTeam, homeLogo, awayLogo, time, context);},
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(homeLogo,
+                                            width: 30, height: 30)),
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(homeLogo,
-                                          width: 30, height: 30)),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      homeTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
+                                      flex: 3,
+                                      child: Text(
+                                        homeTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 2,
-                                    child: Column(
-                                      children: [
-                                        const Text(
-                                          'PST',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          time,
-                                          style: const TextStyle(
-                                              fontSize: 10, color: Colors.grey),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      awayTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Flexible(
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(awayLogo,
-                                          width: 30, height: 30)),
-                                ],
+                                      flex: 2,
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            'PST',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Text(
+                                            time,
+                                            style: const TextStyle(
+                                                fontSize: 10, color: Colors.grey),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      flex: 3,
+                                      child: Text(
+                                        awayTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(awayLogo,
+                                            width: 30, height: 30)),
+                                  ],
+                                ),
                               );
                             } else if (shortStatus == 'CANC') {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Flexible(
+                              return GestureDetector(
+                                onTap: () {navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam, awayTeam, homeLogo, awayLogo, time, context);},
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(homeLogo,
+                                            width: 30, height: 30)),
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(homeLogo,
-                                          width: 30, height: 30)),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      homeTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
+                                      flex: 3,
+                                      child: Text(
+                                        homeTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 2,
-                                    child: Column(
-                                      children: [
-                                        const Text(
-                                          'CANC',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          time,
-                                          style: const TextStyle(
-                                              fontSize: 10, color: Colors.grey),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      awayTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Flexible(
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(awayLogo,
-                                          width: 30, height: 30)),
-                                ],
+                                      flex: 2,
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            'CANC',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Text(
+                                            time,
+                                            style: const TextStyle(
+                                                fontSize: 10, color: Colors.grey),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      flex: 3,
+                                      child: Text(
+                                        awayTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(awayLogo,
+                                            width: 30, height: 30)),
+                                  ],
+                                ),
                               );
                             } else if (shortStatus == 'NS') {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Flexible(
+                              return GestureDetector(
+                                onTap: () {navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam, awayTeam, homeLogo, awayLogo, time, context);},
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(homeLogo,
+                                            width: 30, height: 30)),
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(homeLogo,
-                                          width: 30, height: 30)),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      homeTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
+                                      flex: 3,
+                                      child: Text(
+                                        homeTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 2,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          time,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      awayTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Flexible(
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(awayLogo,
-                                          width: 30, height: 30)),
-                                ],
+                                      flex: 2,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            time,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      flex: 3,
+                                      child: Text(
+                                        awayTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(awayLogo,
+                                            width: 30, height: 30)),
+                                  ],
+                                ),
                               );
                             } else if (shortStatus != 'FT') {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Flexible(
+                              return GestureDetector(
+                                onTap: () {navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam, awayTeam, homeLogo, awayLogo, time, context);},
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(homeLogo,
+                                            width: 30, height: 30)),
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(homeLogo,
-                                          width: 30, height: 30)),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      homeTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
+                                      flex: 3,
+                                      child: Text(
+                                        homeTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 2,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '$scoreHome - $scoreAway',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          width: 3,
-                                        ),
-                                        Container(
-                                          height: 16,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.green),
-                                          child: Center(
-                                            child: Text(
-                                              timeElapsed.toString(),
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      flex: 2,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '$scoreHome - $scoreAway',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          Container(
+                                            height: 16,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.green),
+                                            child: Center(
+                                              child: Text(
+                                                timeElapsed.toString(),
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      awayTeam,
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Flexible(
+                                    Flexible(
                                       fit: FlexFit.tight,
-                                      flex: 1,
-                                      child: Image.network(awayLogo,
-                                          width: 30, height: 30)),
-                                ],
+                                      flex: 3,
+                                      child: Text(
+                                        awayTeam,
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 1,
+                                        child: Image.network(awayLogo,
+                                            width: 30, height: 30)),
+                                  ],
+                                ),
                               );
                             } else {
                               return GestureDetector(

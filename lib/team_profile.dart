@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:podosphere/team_profile_banner.dart';
 import 'package:podosphere/team_profile_coach.dart';
+import 'package:podosphere/team_profile_next_game.dart';
 import 'package:podosphere/team_profile_squad.dart';
 import 'package:podosphere/team_profile_venue.dart';
 
@@ -110,6 +111,12 @@ class _TeamProfileState extends State<TeamProfile> {
                 height: 15,
               ),
               Container(child: TeamProfileCoach(teamId: widget.teamId)),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                child: NextGame(teamId: widget.teamId),
+              ),
               SizedBox(
                 height: 15,
               ),

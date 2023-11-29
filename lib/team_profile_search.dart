@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:podosphere/team_profile_banner_search.dart';
+import 'package:podosphere/team_profile_next_game.dart';
 import 'package:podosphere/team_profile_venue_serach.dart';
 
 class TeamProfileSearch extends StatefulWidget {
@@ -59,7 +60,7 @@ class _TeamProfileSearchState extends State<TeamProfileSearch> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.green,
+      color: const Color(0xFF333333),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
@@ -83,7 +84,8 @@ class _TeamProfileSearchState extends State<TeamProfileSearch> {
               Container(
                 child: TeamProfileSquad(teamId: widget.teamId)
               ),*/
-              
+              SizedBox(height: 15,),
+              Container(child: NextGame(teamId: widget.teamId),),
             ],
           ),
         ),

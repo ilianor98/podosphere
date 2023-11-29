@@ -17,7 +17,7 @@ class TeamProfileBannerSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF333333),
+        color: Colors.grey.shade700,
         borderRadius: BorderRadius.circular(10.0),
       ),
       padding: EdgeInsets.all(10.0),
@@ -37,7 +37,7 @@ class TeamProfileBannerSearch extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${profileData[0]['team']['name']} - [${profileData[0]['team']['code']}]',
+                '${profileData[0]['team']['name']} [${profileData[0]['team']['code']}]',
                 style: TextStyle(color: Colors.white, fontSize: 20),
                 softWrap: true,
               ),
