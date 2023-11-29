@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:podosphere/favorite_team_widget.dart';
 import 'package:podosphere/team_profile_search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,11 +15,13 @@ class Favorites extends StatefulWidget {
 class _FavoritesState extends State<Favorites> {
   final TextEditingController _leagueIdController = TextEditingController();
   List<String> _savedLeagueIds = [];
+  List<String> _savedTeamIds = [];
 
   @override
   void initState() {
     super.initState();
     _loadSavedLeagueIds();
+    _loadSavedTeamIds();
   }
 
   Future<void> _loadSavedLeagueIds() async {
@@ -161,7 +164,10 @@ class _FavoritesState extends State<Favorites> {
           },
         );
       },
-    );
+    ).then((value) {
+      // Refresh the favorites screen after closing the dialog
+      _loadSavedTeamIds();
+    });
   }
 
   void _showTeamResultsDialog(BuildContext context, List<dynamic> teams) {
@@ -202,7 +208,6 @@ class _FavoritesState extends State<Favorites> {
                             teamId: teamId,
                             logo: teamLogo,
                             teamName: teamName,
-                            
                           ),
                         );
                       },
@@ -250,11 +255,24 @@ class _FavoritesState extends State<Favorites> {
     );
   }
 
+  Future<void> _loadSavedTeamIds() async {
+    final savedIds = await FavoritesManager.getFavoriteTeamIds();
+    setState(() {
+      _savedTeamIds = savedIds;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        title: const Text('Favorites'),
+        backgroundColor: Colors.grey.shade700,
+        title: const Text(
+          'Favorites',
+          style: TextStyle(color: Colors.white, fontSize: 25),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: _showSearchDialog,
@@ -265,63 +283,55 @@ class _FavoritesState extends State<Favorites> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _leagueIdController,
-                decoration: InputDecoration(
-                  labelText: 'Enter League ID',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _addToFavorites,
-                child: Text('Add to Favorites'),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  final savedIds =
-                      await FavoritesManager.getFavoriteLeagueIds();
-                  setState(() {
-                    _savedLeagueIds = savedIds;
-                  });
-                },
-                child: Text('Display Saved League IDs'),
-              ),
-              SizedBox(height: 20),
-              if (_savedLeagueIds.isNotEmpty)
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade700,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Column(
+              children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Saved League IDs:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      'Favorite teams',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 8),
-                    ..._savedLeagueIds
-                        .map(
-                          (id) => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(id),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await FavoritesManager
-                                      .removeFromFavoriteLeagues(id);
-                                  await _loadSavedLeagueIds();
-                                },
-                                child: Text('Remove'),
-                              ),
-                            ],
-                          ),
-                        )
-                        .toList(),
+                    if (_savedTeamIds.isEmpty)
+                      Text(
+                        'No favorite teams',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      )
+                    else
+                      Column(
+                        children: _savedTeamIds.map((teamId) {
+                          return FavTeamWidget(teamId: teamId);
+                        }).toList(),
+                      )
                   ],
                 ),
-            ],
+                Column(
+                  children: [
+                    Text(
+                      'Favorite Leagues',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      'test1',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      'test2',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -331,6 +341,7 @@ class _FavoritesState extends State<Favorites> {
 
 class FavoritesManager {
   static const _leagueKey = 'favorite_league_ids';
+  static const _teamKey = 'favorite_team_ids';
 
   static Future<List<String>> getFavoriteLeagueIds() async {
     final prefs = await SharedPreferences.getInstance();
@@ -350,5 +361,39 @@ class FavoritesManager {
     List<String> favoriteIds = prefs.getStringList(_leagueKey) ?? [];
     favoriteIds.remove(id);
     await prefs.setStringList(_leagueKey, favoriteIds);
+  }
+
+  static Future<List<String>> getFavoriteTeamIds() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteIds = prefs.getStringList(_teamKey) ?? [];
+    return favoriteIds;
+  }
+
+  static Future<void> addToFavoriteTeams(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteIds = prefs.getStringList(_teamKey) ?? [];
+    favoriteIds.add(id);
+    await prefs.setStringList(_teamKey, favoriteIds);
+  }
+
+  static Future<void> removeFromFavoriteTeams(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteIds = prefs.getStringList(_teamKey) ?? [];
+    favoriteIds.remove(id);
+    await prefs.setStringList(_teamKey, favoriteIds);
+  }
+
+  // Check if a team ID exists in favorites
+  static Future<bool> isTeamInFavorites(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteIds = prefs.getStringList(_teamKey) ?? [];
+    return favoriteIds.contains(id);
+  }
+
+  // Check if a league ID exists in favorites
+  static Future<bool> isLeagueInFavorites(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteIds = prefs.getStringList(_leagueKey) ?? [];
+    return favoriteIds.contains(id);
   }
 }
