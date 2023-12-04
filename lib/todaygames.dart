@@ -95,7 +95,7 @@ class _TodayGamesState extends State<TodayGames> {
   List<Map<String, dynamic>> visibleLeagues = [];
   ScrollController _scrollController = ScrollController();
   int loadedLeagues = 0;
-  int leaguesPerPage = 5;
+  int leaguesPerPage = 7;
 
   @override
   void initState() {
