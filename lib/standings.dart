@@ -117,7 +117,7 @@ Widget loadImage(String url) {
   const int maxRetries = 2;
 
   return Image.network(
-    url,
+    'http://10.0.2.2:5000/team-logo/$url',
     width: 25,
     height: 25,
     errorBuilder: (context, error, stackTrace) {
@@ -154,7 +154,7 @@ class StandingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final teamName = teamData['team']['name'];
-    final logo = teamData['team']['logo'];
+    final logo = teamData['team']['id'].toString();
     final rank = teamData['rank'];
     final points = teamData['points'];
     final goalsFor = teamData['all']['goals']['for'];

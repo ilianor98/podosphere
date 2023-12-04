@@ -122,11 +122,18 @@ class _NextGameState extends State<NextGame> {
     final penaltyScoreHome = fixture[0]['score']['penalty']['home'];
     final penaltyScoreAway = fixture[0]['score']['penalty']['away'];
     final fixtureId = fixture[0]['fixture']['id'];
-    return GestureDetector(
+    return /*fixture.isEmpty 
+      ? Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade700,
+          borderRadius: BorderRadius.circular(10.0),),
+          child: const Center(child: Text('No data for next fixture available', style: TextStyle(color: Colors.white), textAlign: TextAlign.center,),),
+      )
+     :GestureDetector(
       onTap: () {
         navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam, awayTeam, homeLogo, awayLogo, time, context);
       },
-      child: Container(
+      child: */Container(
         decoration: BoxDecoration(
           color: Colors.grey.shade700,
           borderRadius: BorderRadius.circular(10.0),
@@ -394,7 +401,7 @@ class _NextGameState extends State<NextGame> {
         ),
               ],
             )),
-      ),
+      //),
     );
   }
 }

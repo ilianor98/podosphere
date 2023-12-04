@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:podosphere/games_by_league.dart';
+import 'package:podosphere/today_games_search.dart';
 
 class TodayGames extends StatefulWidget {
   const TodayGames({Key? key});
@@ -91,11 +92,35 @@ class _TodayGamesState extends State<TodayGames> {
   List<Map<String, dynamic>> fixtures = [];
   List<Map<String, dynamic>> apiLeagues =
       []; // Updated list to hold league information
+  List<Map<String, dynamic>> visibleLeagues = [];
+  ScrollController _scrollController = ScrollController();
+  int loadedLeagues = 0;
+  int leaguesPerPage = 5;
 
   @override
   void initState() {
     super.initState();
     fetchFixtures();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadNextLeagues();
+    }
+  }
+
+  void _loadNextLeagues() {
+    if (loadedLeagues < apiLeagues.length) {
+      setState(() {
+        final nextLeagues =
+            apiLeagues.skip(loadedLeagues).take(leaguesPerPage).toList();
+        visibleLeagues.addAll(nextLeagues);
+        loadedLeagues += leaguesPerPage;
+      });
+    }
   }
 
   Future<void> fetchFixtures() async {
@@ -127,6 +152,8 @@ class _TodayGamesState extends State<TodayGames> {
           setState(() {
             fixtures = List<Map<String, dynamic>>.from(tempFixtures);
             updateLeagueList(fixtures); // Update the leagueList
+            visibleLeagues = apiLeagues.take(leaguesPerPage).toList();
+            loadedLeagues = leaguesPerPage;
           });
         } else {
           throw Exception('Invalid response format');
@@ -162,6 +189,9 @@ class _TodayGamesState extends State<TodayGames> {
             'flag': leagueFlag,
             'country': country,
           });
+          visibleLeagues =
+              List<Map<String, dynamic>>.from(apiLeagues.take(loadedLeagues));
+          //print(visibleLeagues);
         });
       }
     }
@@ -173,6 +203,10 @@ class _TodayGamesState extends State<TodayGames> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> visibleLeagues =
+        loadedLeagues < apiLeagues.length
+            ? apiLeagues.take(loadedLeagues).toList()
+            : apiLeagues;
     return Scaffold(
       backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
@@ -184,19 +218,32 @@ class _TodayGamesState extends State<TodayGames> {
         ),
         backgroundColor: Colors.grey.shade700,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, size: 32,),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TodaySearch(fixtures: fixtures,)),
+              );
+            },
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         color: Colors.white,
         backgroundColor: Colors.grey.shade700,
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: apiLeagues.map((league) {
+          controller: _scrollController,
+          child: Column(
+            children: [
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: visibleLeagues.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final league = visibleLeagues[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FixturesLeague(
@@ -208,9 +255,9 @@ class _TodayGamesState extends State<TodayGames> {
                       country: league['country'].toString(),
                     ),
                   );
-                }).toList(),
+                },
               ),
-            ),
+            ],
           ),
         ),
       ),
