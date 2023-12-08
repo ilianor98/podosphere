@@ -84,10 +84,10 @@ class _PreMatchDetailsState extends State<PreMatchDetails> {
     return Scaffold(
       backgroundColor: const Color(0xFF333333),
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Match Details',
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
         ),
         backgroundColor: Colors.grey.shade700,
@@ -162,7 +162,7 @@ class _PreMatchDetailsState extends State<PreMatchDetails> {
                                       decorationColor: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Text(
+                                const Text(
                                   'PST',
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.white),
@@ -187,7 +187,7 @@ class _PreMatchDetailsState extends State<PreMatchDetails> {
                                       decorationColor: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Text(
+                                const Text(
                                   'CANC',
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.white),
@@ -212,7 +212,7 @@ class _PreMatchDetailsState extends State<PreMatchDetails> {
                                       decorationColor: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
-                                Text(
+                                const Text(
                                   'TBD',
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.white),
@@ -229,7 +229,7 @@ class _PreMatchDetailsState extends State<PreMatchDetails> {
                               children: [
                                 Text(
                                   time,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14, color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
@@ -251,34 +251,44 @@ class _PreMatchDetailsState extends State<PreMatchDetails> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Column( children:[
-                  if(error == 'Insufficient data')
-                  Text('Error: $error', style: TextStyle(color: Colors.white, fontSize: 16),)
-                  else if (error == 'Failed to fetch fixture odds')
-                  Text('Error: $error', style: TextStyle(color: Colors.white, fontSize: 16),)
-                  else
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: oddsStats.isEmpty
-                        ? List.generate(1, (index) => Text(error)) // Display error message when oddsStats is empty
-                        : List.generate(
-                            oddsStats[0]['bookmakers'].length,
-                            (index) {
-                              return Column(
-                                children: [
-                                  OddsItem(
-                                    bookmaker: oddsStats[0]['bookmakers']
-                                        [index],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ), // Adjust the height as needed
-                                ],
-                              );
-                            },
-                          ).toList()
-                ),]),
-                  
+                  Column(children: [
+                    if (error == 'Insufficient data')
+                      Text(
+                        'Error: $error',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    else if (error == 'Failed to fetch fixture odds')
+                      Text(
+                        'Error: $error',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    else
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: oddsStats.isEmpty
+                              ? List.generate(
+                                  1,
+                                  (index) => Text(
+                                      error)) // Display error message when oddsStats is empty
+                              : List.generate(
+                                  oddsStats[0]['bookmakers'].length,
+                                  (index) {
+                                    return Column(
+                                      children: [
+                                        OddsItem(
+                                          bookmaker: oddsStats[0]['bookmakers']
+                                              [index],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ), // Adjust the height as needed
+                                      ],
+                                    );
+                                  },
+                                ).toList()),
+                  ]),
                 ],
               ),
             ),
@@ -304,16 +314,14 @@ class OddsItem extends StatelessWidget {
         children: [
           Text(
             bookmakerId,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
+            style: const TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(bookmaker?['bets'][0]['name'],
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
               )),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text('1',
@@ -334,15 +342,15 @@ class OddsItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(bookmaker?['bets'][0]['values'][0]['odd'],
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   )),
               Text(bookmaker?['bets'][0]['values'][1]['odd'],
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   )),
               Text(bookmaker?['bets'][0]['values'][2]['odd'],
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   )),
             ],

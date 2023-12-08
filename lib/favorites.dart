@@ -105,14 +105,14 @@ class _FavoritesState extends State<Favorites> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text('Search Teams/Leagues'),
+              title: const Text('Search Teams/Leagues'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
                       DropdownButton<String>(
-                        items: [
+                        items: const [
                           DropdownMenuItem<String>(
                             value: 'teams',
                             child: Text('Search Teams'),
@@ -128,21 +128,21 @@ class _FavoritesState extends State<Favorites> {
                           });
                         },
                         value: selectedType,
-                        hint: Text('Select Type'),
+                        hint: const Text('Select Type'),
                       ),
                       Expanded(
                         child: TextField(
                           onChanged: (String value) {
                             searchText = value;
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Enter search query',
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () async {
                       if (selectedType != null && searchText != null) {
@@ -156,7 +156,7 @@ class _FavoritesState extends State<Favorites> {
                         }
                       }
                     },
-                    child: Text('Search'),
+                    child: const Text('Search'),
                   ),
                 ],
               ),
@@ -175,7 +175,7 @@ class _FavoritesState extends State<Favorites> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Search Results - Teams'),
+          title: const Text('Search Results - Teams'),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
@@ -227,7 +227,7 @@ class _FavoritesState extends State<Favorites> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Search Results - Leagues'),
+          title: const Text('Search Results - Leagues'),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
@@ -292,26 +292,35 @@ class _FavoritesState extends State<Favorites> {
               children: [
                 Column(
                   children: [
-                    Text(
+                    const Text(
                       'Favorite teams',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
                     if (_savedTeamIds.isEmpty)
-                      Text(
-                        'No favorite teams',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        textAlign: TextAlign.center,
+                      const Expanded(
+                        child: Text(
+                          'No favorite teams',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
                       )
                     else
                       Column(
                         children: _savedTeamIds.map((teamId) {
-                          return FavTeamWidget(teamId: teamId);
+                          return FavTeamWidget(
+                            key: Key(teamId),
+                            teamId: teamId,
+                            onRemove: () {
+                              // Remove from favorites and update state
+                              _removeFromFavorites(teamId);
+                            },
+                          );
                         }).toList(),
                       )
                   ],
                 ),
-                Column(
+                const Column(
                   children: [
                     Text(
                       'Favorite Leagues',
@@ -336,6 +345,12 @@ class _FavoritesState extends State<Favorites> {
         ),
       ),
     );
+  }
+
+  // Function to remove a team from favorites and update state
+  Future<void> _removeFromFavorites(String teamId) async {
+    await FavoritesManager.removeFromFavoriteTeams(teamId);
+    await _loadSavedTeamIds(); // Refresh saved team IDs after removal
   }
 }
 

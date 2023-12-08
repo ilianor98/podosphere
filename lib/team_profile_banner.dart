@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class TeamProfileBanner extends StatelessWidget {
   final String logo;
@@ -21,7 +20,7 @@ class TeamProfileBanner extends StatelessWidget {
         color: Colors.grey.shade700,
         borderRadius: BorderRadius.circular(10.0),
       ),
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Row(
         children: [
           Container(
@@ -30,7 +29,7 @@ class TeamProfileBanner extends StatelessWidget {
             height: 75,
             width: 75,
           )),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           Column(
@@ -39,37 +38,42 @@ class TeamProfileBanner extends StatelessWidget {
             children: [
               Text(
                 '${profileData[0]['team']['name']} - [${profileData[0]['team']['code']}]',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
-              SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Country: ${profileData[0]['team']['country']}',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
-                  SvgPicture.asset(
-                    'assets/images/$flag',
+                  Image.asset(
+                    'assets/images/$flag.png',
                     height: 12,
                   ),
-                  
                 ],
               ),
-              SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Text(
-                    'Founded: ${profileData[0]['team']['founded']}',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                  SizedBox(height: 5,),
+                'Founded: ${profileData[0]['team']['founded']}',
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
               Text(
-                    'Team ID: ${profileData[0]['team']['id']}',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
+                'Team ID: ${profileData[0]['team']['id']}',
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ],
           ),
         ],

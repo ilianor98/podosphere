@@ -78,19 +78,76 @@ class _StandingsState extends State<Standings> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(width: 19,),
-                  Flexible(flex: 1, fit: FlexFit.tight,child: Text('#', style: TextStyle(color: Colors.white),),),
-                  Flexible(flex: 1,fit: FlexFit.tight,child: SizedBox(),),
-                  SizedBox(width: 5,),
-                  Flexible(flex: 6,fit: FlexFit.tight,child: Text('Team', style: TextStyle(color: Colors.white),),),
-                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GP', style: TextStyle(color: Colors.white),),),
-                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GW', style: TextStyle(color: Colors.white),),),
-                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GD', style: TextStyle(color: Colors.white),),),
-                  Flexible(flex: 1,fit: FlexFit.tight,child: Text('GL', style: TextStyle(color: Colors.white),),),
-                  Flexible(flex: 2,fit: FlexFit.tight,child: Text('Points', style: TextStyle(color: Colors.white),),),
-                ],
-              ),
+                  children: [
+                    SizedBox(
+                      width: 19,
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        '#',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: SizedBox(),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(
+                      flex: 6,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        'Team',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        'GP',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        'GW',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        'GD',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        'GL',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        'Points',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: standingsData.length,
@@ -117,7 +174,7 @@ Widget loadImage(String url) {
   const int maxRetries = 2;
 
   return Image.network(
-    'http://10.0.2.2:5000/team-logo/$url',
+    'https://media-4.api-sports.io/football/teams/$url.png',
     width: 25,
     height: 25,
     errorBuilder: (context, error, stackTrace) {
@@ -137,7 +194,8 @@ class StandingsItem extends StatelessWidget {
 
   StandingsItem({required this.teamData, required this.season});
 
-  void navigateToTeamDetails(BuildContext context, int teamId, String teamName) {
+  void navigateToTeamDetails(
+      BuildContext context, int teamId, String teamName) {
     // Navigate to the TeamDetailsPage and pass the team's ID as a parameter
     Navigator.push(
       context,
@@ -173,43 +231,101 @@ class StandingsItem extends StatelessWidget {
       child: Column(
         children: [
           ExpansionTile(
-            
             title: Row(
               children: [
-                Flexible(flex: 1, fit: FlexFit.tight,child: Text('${rank}', style: TextStyle(color: Colors.white),),),
-                Flexible(flex: 1,fit: FlexFit.tight,child: loadImage(logo),),
-                SizedBox(width: 5,),
-                Flexible(flex: 6,fit: FlexFit.tight,child: Text('${teamName}', style: TextStyle(color: Colors.white),),),
-                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesPlayed}', style: TextStyle(color: Colors.white),),),
-                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesWon}', style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),),
-                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesDraw}', style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),),
-                Flexible(flex: 1,fit: FlexFit.tight,child: Text('${gamesLost}', style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),),
-                
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '${rank}',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: loadImage(logo),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Flexible(
+                  flex: 6,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '${teamName}',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '${gamesPlayed}',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '${gamesWon}',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '${gamesDraw}',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '${gamesLost}',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
-            trailing: Text('$points', style: TextStyle(color: Colors.white,fontSize: 17 ,fontWeight: FontWeight.bold),),
+            trailing: Text(
+              '$points',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+            ),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'GF: $goalsFor - GA: $goalsAgainst',
-                  style: TextStyle(color: Colors.white),
-                ),
-                const SizedBox(width: 10), // Adjust spacing if needed
-                Row(
-                  children: [
-                    Text('Form: ', style: TextStyle(color: Colors.white),),
-                    FormDisplay(form: form),
-                  ],
-                ),
-              ],
-            ),
+                children: [
+                  Text(
+                    'GF: $goalsFor - GA: $goalsAgainst',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(width: 10), // Adjust spacing if needed
+                  Row(
+                    children: [
+                      Text(
+                        'Form: ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      FormDisplay(form: form),
+                    ],
+                  ),
+                ],
+              ),
             ],
-            ),
+          ),
         ],
       ),
-      );
+    );
   }
 }
 
@@ -251,10 +367,8 @@ class FormDisplay extends StatelessWidget {
             child: Center(
               child: Text(
                 result,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400
-                ),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
               ),
             ),
           ),

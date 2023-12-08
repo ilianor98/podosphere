@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:podosphere/team_profile.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LeagueTeams extends StatefulWidget {
   final int leagueId;
@@ -73,7 +72,7 @@ class _LeagueTeamsState extends State<LeagueTeams> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: Row(
           children: [
@@ -85,17 +84,17 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                 height: 30, // Adjust the height as needed
               ),
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             Text(
               '${widget.champName}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24.0,
                 color: Colors.white,
               ),
             ),
-            SizedBox(width: 16.0),
-            SvgPicture.asset(
-              'assets/images/${widget.flag}',
+            const SizedBox(width: 16.0),
+            Image.asset(
+              'assets/images/${widget.flag}.png',
               width: 30, // Adjust the width as needed
               height: 30, // Adjust the height as needed
             ),
@@ -126,8 +125,8 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                 );
               },
               child: Container(
-                margin: EdgeInsets.all(16.0),
-                padding: EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade700,
                   borderRadius: BorderRadius.circular(10.0),
@@ -139,10 +138,10 @@ class _LeagueTeamsState extends State<LeagueTeams> {
                       width: 50,
                       height: 50,
                     ),
-                    SizedBox(width: 16.0),
+                    const SizedBox(width: 16.0),
                     Text(
                       team['team']['name'],
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                       ),
@@ -156,7 +155,7 @@ class _LeagueTeamsState extends State<LeagueTeams> {
             return ListTile(
               title: Text(
                 'Invalid team data at index $index',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.red,
                   fontSize: 16,
                 ),

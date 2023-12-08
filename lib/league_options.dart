@@ -3,7 +3,6 @@ import 'package:podosphere/ch_leag_display.dart';
 import 'package:podosphere/league_history.dart';
 import 'package:podosphere/league_teams.dart';
 import 'package:podosphere/standings.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LeagueOptions extends StatelessWidget {
   final int leagueId;
@@ -51,8 +50,8 @@ class LeagueOptions extends StatelessWidget {
               ),
             ),
             SizedBox(width: 16.0),
-            SvgPicture.asset(
-              'assets/images/$flag',
+            Image.asset(
+              'assets/images/$flag.png',
               width: 50, // Adjust the width as needed
               height: 50, // Adjust the height as needed
             ),
@@ -63,147 +62,147 @@ class LeagueOptions extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Padding(
           padding: const EdgeInsets.only(top: 0.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-          SizedBox(height: 16.0),
-          FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Container(
-              
-              padding: EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  // Handle the "Current Season" option
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Standings(
-                        leagueId: leagueId,
-                        champName: leagueName,
-                        season: currentSeason,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 16.0),
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Container(
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade700,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        // Handle the "Current Season" option
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Standings(
+                              leagueId: leagueId,
+                              champName: leagueName,
+                              season: currentSeason,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Center(
+                        child: Text('Current Season',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            )),
                       ),
                     ),
-                  );
-                },
-                child: Center(
-                  child: Text('Current Season',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      )),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          SizedBox(height: 16.0),
-          FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LeagueHistory(
-                        leagueId: leagueId,
-                        leagueName: leagueName,
-                        logo: logo,
-                        flag: flag,
+                SizedBox(height: 16.0),
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade700,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LeagueHistory(
+                              leagueId: leagueId,
+                              leagueName: leagueName,
+                              logo: logo,
+                              flag: flag,
+                            ),
+                          ),
+                        );
+                        // You can navigate to a page that lists older seasons for the selected league here
+                      },
+                      child: Center(
+                        child: Text('League History',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            )),
                       ),
                     ),
-                  );
-                  // You can navigate to a page that lists older seasons for the selected league here
-                },
-                child: Center(
-                  child: Text('League History',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      )),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          SizedBox(height: 16.0),
-          FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LeagueTeams(
-                        leagueId: leagueId,
-                        champName: leagueName,
-                        season: currentSeason,
-                        flag: flag,
-                        logo: logo,
+                SizedBox(height: 16.0),
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade700,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LeagueTeams(
+                              leagueId: leagueId,
+                              champName: leagueName,
+                              season: currentSeason,
+                              flag: flag,
+                              logo: logo,
+                            ),
+                          ),
+                        );
+                        // You can navigate to a page that lists older seasons for the selected league here
+                      },
+                      child: Center(
+                        child: Text('League Teams',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            )),
                       ),
                     ),
-                  );
-                  // You can navigate to a page that lists older seasons for the selected league here
-                },
-                child: Center(
-                  child: Text('League Teams',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      )),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          SizedBox(height: 16.0),
-          FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChampionsLeagueDisplay(),
+                SizedBox(height: 16.0),
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade700,
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                  );
-                  // You can navigate to a page that lists older seasons for the selected league here
-                },
-                child: Center(
-                  child: Text('test chou lou',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      )),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChampionsLeagueDisplay(),
+                          ),
+                        );
+                        // You can navigate to a page that lists older seasons for the selected league here
+                      },
+                      child: Center(
+                        child: Text('test chou lou',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            )),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        ],
-              ),
-            ),),
+        ),
       ),
     );
   }

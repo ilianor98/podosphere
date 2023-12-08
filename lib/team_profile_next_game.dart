@@ -62,14 +62,13 @@ class _NextGameState extends State<NextGame> {
   }
 
   String formatDate(String dateTimeString) {
-  final parsedDate = DateTime.parse(dateTimeString);
-  final localDate = parsedDate.toLocal();
+    final parsedDate = DateTime.parse(dateTimeString);
+    final localDate = parsedDate.toLocal();
 
-  final formattedDate = '${localDate.day}/${localDate.month}/${localDate.year % 100}';
-  return formattedDate;
-}
-
-
+    final formattedDate =
+        '${localDate.day}/${localDate.month}/${localDate.year % 100}';
+    return formattedDate;
+  }
 
   Widget loadImage(String url) {
     int retryCount = 0;
@@ -90,7 +89,15 @@ class _NextGameState extends State<NextGame> {
     );
   }
 
-  void navigateToPreMatchDetails(int fixtureId, String shortStatus, String homeTeam, String awayTeam, String homeLogo,String awayLogo,String time, BuildContext context) {
+  void navigateToPreMatchDetails(
+      int fixtureId,
+      String shortStatus,
+      String homeTeam,
+      String awayTeam,
+      String homeLogo,
+      String awayLogo,
+      String time,
+      BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -122,286 +129,418 @@ class _NextGameState extends State<NextGame> {
     final penaltyScoreHome = fixture[0]['score']['penalty']['home'];
     final penaltyScoreAway = fixture[0]['score']['penalty']['away'];
     final fixtureId = fixture[0]['fixture']['id'];
-    return /*fixture.isEmpty 
-      ? Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.shade700,
-          borderRadius: BorderRadius.circular(10.0),),
-          child: const Center(child: Text('No data for next fixture available', style: TextStyle(color: Colors.white), textAlign: TextAlign.center,),),
-      )
-     :GestureDetector(
-      onTap: () {
-        navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam, awayTeam, homeLogo, awayLogo, time, context);
-      },
-      child: */Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.shade700,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Text('Next Game', style: TextStyle(color: Colors.white), textAlign: TextAlign.center,),
-                SizedBox(height: 5,),
-                Row(
-          children: [
-                if (shortStatus == 'PST') ...[
-                  Flexible(
-                    flex:2, fit: FlexFit.tight,
-                    child: const Text(
-                      'PST',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(homeLogo)),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,
-                    child: Text(
-                      time,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          decoration: TextDecoration.lineThrough,
-                          decorationThickness: 2,
-                          decorationColor: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(awayLogo)),
-                ] else if (shortStatus == 'CANC') ...[
-                  Flexible(
-                    flex:2, fit: FlexFit.tight,
-                    child: const Text(
-                      'CANC',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(homeLogo)),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,
-                    child: Text(
-                      time,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          decoration: TextDecoration.lineThrough,
-                          decorationThickness: 2,
-                          decorationColor: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(awayLogo)),
-                ] else if (shortStatus == 'TBD') ...[
-                  Flexible(
-                    flex:2, fit: FlexFit.tight,
-                    child: const Text(
-                      'TBD',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(homeLogo)),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,
-                    child: Text(
-                      time,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          decoration: TextDecoration.lineThrough,
-                          decorationThickness: 2,
-                          decorationColor: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(awayLogo)),
-                ] else if (shortStatus == 'NS') ...[
-                   Flexible(flex: 2, child: SizedBox(), fit: FlexFit.tight),
-                  Flexible(flex: 2,child: loadImage(homeLogo), fit: FlexFit.tight),
-                  Flexible(flex: 3,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ), fit: FlexFit.tight
-                  ),
-                  Flexible(flex: 2,
-                    child: Column(
-                      children: [
-                        Text(
-                          time,
-                          style: const TextStyle(fontSize: 14, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(date, style: TextStyle(fontSize: 9, color: Colors.white), textAlign: TextAlign.center,)
-                      ],
-                    ), fit: FlexFit.tight
-                  ),
-                  Flexible(flex: 3,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ), fit: FlexFit.tight
-                  ),
-                  Flexible(flex: 2,
-                    child: loadImage(awayLogo), fit: FlexFit.tight),
-                ] else if (shortStatus == 'PEN') ...[
-                  Flexible(flex:2, fit: FlexFit.tight,
-                    child: const Text(
-                      'PEN',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(homeLogo)),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),),
-                  Flexible(flex:2, fit: FlexFit.tight,
-                    child: Column(
-                      children: [
-                        Text(
-                          '$scoreHome - $scoreAway',
-                          style: const TextStyle(fontSize: 14, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          '$penaltyScoreHome - $penaltyScoreAway',
-                          style: TextStyle(fontSize: 12, color: Colors.grey.shade300),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(flex: 3,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ), fit: FlexFit.tight
-                  ),
-                  Flexible(flex: 2,
-                    child: loadImage(awayLogo), fit: FlexFit.tight),
-                ] else if (shortStatus != 'FT') ...[
-                  Flexible(flex:2, fit: FlexFit.tight,
-                    child: Text(
-                      '${timeElapsed.toString()}\'',
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(homeLogo)),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),),
-                  Flexible(flex: 2, fit: FlexFit.tight,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: Colors.green,
-                      ),
-                      child: Text(
-                        '$scoreHome - $scoreAway',
-                        style: const TextStyle(fontSize: 14, color: Colors.white),
+    return fixture.isEmpty
+        ? Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade700,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: const Center(
+              child: Text(
+                'No data for next fixture available',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        : GestureDetector(
+            onTap: () {
+              navigateToPreMatchDetails(fixtureId, shortStatus, homeTeam,
+                  awayTeam, homeLogo, awayLogo, time, context);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade700,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Next Game',
+                        style: TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                  ),
-                  Flexible(flex: 3,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ), fit: FlexFit.tight
-                  ),
-                  Flexible(flex: 2,
-                    child: loadImage(awayLogo), fit: FlexFit.tight)
-                ] else ...[
-                  Flexible(flex:2, fit: FlexFit.tight,
-                    child: const Text(
-                      'FT',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 2, fit: FlexFit.tight,child: loadImage(homeLogo)),
-                  Flexible(flex: 3, fit: FlexFit.tight,
-                    child: Text(
-                      homeTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),),
-                  Flexible(flex:2, fit: FlexFit.tight,
-                    child: Text(
-                      '$scoreHome - $scoreAway',
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Flexible(flex: 3,
-                    child: Text(
-                      awayTeam,
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ), fit: FlexFit.tight
-                  ),
-                  Flexible(flex: 2,
-                    child: loadImage(awayLogo), fit: FlexFit.tight)
-                ]
-          ],
-        ),
-              ],
-            )),
-      //),
-    );
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          if (shortStatus == 'PST') ...[
+                            const Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                'PST',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                homeTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                time,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationThickness: 2,
+                                    decorationColor: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                awayTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo)),
+                          ] else if (shortStatus == 'CANC') ...[
+                            const Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                'CANC',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                homeTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                time,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationThickness: 2,
+                                    decorationColor: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                awayTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo)),
+                          ] else if (shortStatus == 'TBD') ...[
+                            const Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                'TBD',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                homeTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                time,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationThickness: 2,
+                                    decorationColor: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                awayTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo)),
+                          ] else if (shortStatus == 'NS') ...[
+                            const Flexible(
+                                flex: 2, fit: FlexFit.tight, child: SizedBox()),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  homeTeam,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      time,
+                                      style: const TextStyle(
+                                          fontSize: 14, color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      date,
+                                      style: const TextStyle(
+                                          fontSize: 9, color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  ],
+                                )),
+                            Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  awayTeam,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo)),
+                          ] else if (shortStatus == 'PEN') ...[
+                            const Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                'PEN',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                homeTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '$scoreHome - $scoreAway',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    '$penaltyScoreHome - $penaltyScoreAway',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey.shade300),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  awayTeam,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo)),
+                          ] else if (shortStatus != 'FT') ...[
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                '${timeElapsed.toString()}\'',
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                homeTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  color: Colors.green,
+                                ),
+                                child: Text(
+                                  '$scoreHome - $scoreAway',
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  awayTeam,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo))
+                          ] else ...[
+                            const Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                'FT',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(homeLogo)),
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                homeTeam,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Text(
+                                '$scoreHome - $scoreAway',
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  awayTeam,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Flexible(
+                                flex: 2,
+                                fit: FlexFit.tight,
+                                child: loadImage(awayLogo))
+                          ]
+                        ],
+                      ),
+                    ],
+                  )),
+            ),
+          );
   }
 }

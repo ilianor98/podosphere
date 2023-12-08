@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class TeamProfileVenue extends StatelessWidget {
   final String logo;
@@ -21,7 +20,7 @@ class TeamProfileVenue extends StatelessWidget {
         color: Colors.grey.shade700,
         borderRadius: BorderRadius.circular(10.0),
       ),
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Row(
         children: [
           InkWell(
@@ -50,7 +49,7 @@ class TeamProfileVenue extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           Expanded(
@@ -60,18 +59,18 @@ class TeamProfileVenue extends StatelessWidget {
               children: [
                 Text(
                   '${profileData[0]['venue']['name']}',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
                   softWrap: true, // Allow text to wrap to the next line
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
                   'Address: ${profileData[0]['venue']['address']}',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
                   softWrap: true, // Allow text to wrap to the next line
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -80,30 +79,30 @@ class TeamProfileVenue extends StatelessWidget {
                   children: [
                     Text(
                       'City: ${profileData[0]['venue']['city']}',
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
-                    SvgPicture.asset(
-                      'assets/images/$flag',
+                    Image.asset(
+                      'assets/images/$flag.png',
                       height: 12,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
                   'Capacity: ${profileData[0]['venue']['capacity']}',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
                   'Surface: ${profileData[0]['venue']['surface']}',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
             ),
