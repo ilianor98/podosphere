@@ -6,12 +6,10 @@ import 'package:podosphere/team_profile_search.dart';
 
 class FavTeamWidget extends StatefulWidget {
   final String teamId;
-  final Function onRemove; // Add onRemove parameter
 
   const FavTeamWidget({
     Key? key,
     required this.teamId,
-    required this.onRemove,
   }) : super(key: key);
 
   @override
@@ -185,6 +183,8 @@ class _FavTeamWidgetState extends State<FavTeamWidget> {
         );
       },
       child: Container(
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: const Color(0xFF333333),
           borderRadius: BorderRadius.circular(10.0),
@@ -228,9 +228,17 @@ class _FavTeamWidgetState extends State<FavTeamWidget> {
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               if (nextFixture.isNotEmpty)
-                Text(
-                  'Next fixture: ${nextFixture[0]['teams']['home']['name']} - ${nextFixture[0]['teams']['away']['name']}',
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                Column(
+                  children: [
+                    const Text(
+                      'Next fixture:',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      '${nextFixture[0]['teams']['home']['name']} - ${nextFixture[0]['teams']['away']['name']}',
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
                 )
               else
                 const Text(

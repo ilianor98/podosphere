@@ -32,186 +32,208 @@ class FixturesLeague extends StatelessWidget {
   }
 
   Widget loadImage(String url) {
-  int retryCount = 0;
-  const int maxRetries = 2;
+    int retryCount = 0;
+    const int maxRetries = 2;
 
-  return CachedNetworkImage(
-    imageUrl: url,
-    width: 25,
-    height: 25,
-    placeholder: (context, url) => Image.asset('assets/images/football-load.gif', width: 25, height: 25,),
-    errorWidget: (context, url, error) {
-      if (retryCount < maxRetries) {
-        retryCount++;
-        return loadImage(url); // Retry loading the image
-      } else {
-        return SizedBox(width: 25, height: 25); // Return an empty SizedBox after max retries
-      }
-    },
-  );
-}
-
-Widget loadLeagueImage(String url) {
-  int retryCount = 0;
-  const int maxRetries = 2;
-
-  return CachedNetworkImage(
-    imageUrl: url,
-    width: 25,
-    height: 25,
-    placeholder: (context, url) => Image.asset('assets/images/football-load.gif', width: 25, height: 25,),
-    errorWidget: (context, url, error) {
-      if (retryCount < maxRetries) {
-        retryCount++;
-        return loadLeagueImage(url); // Retry loading the image
-      } else {
-        return SizedBox(width: 25, height: 25); // Return an empty SizedBox after max retries
-      }
-    },
-  );
-}
-
-String getCountryCodeFromUrl(String url) {
-  // Split the URL by '/' and get the last part
-  List<String> parts = url.split('/');
-  String lastPart = parts.last; // gr.svg
-
-  // Remove the '.svg' extension
-  String countryCode = lastPart.replaceAll('.svg', ''); // gr
-
-  // Capitalize the country code
-  countryCode = countryCode.toUpperCase(); // GR
-
-  return countryCode;
-}
-
-
-  Future<Widget> loadSvgImage(String url) async {
-  int retryCount = 0;
-  const int maxRetries = 3;
-
-  Completer<Widget> completer = Completer();
-
-  while (retryCount < maxRetries) {
-    try {
-      final svgData = await http.get(Uri.parse(url));
-      if (svgData.statusCode == 200) {
-        final widget = SvgPicture.string(
-          svgData.body,
-          width: 30,
-          height: 30,
-        );
-        completer.complete(widget);
-        return widget;
-      }
-    } catch (e) {
-      retryCount++;
-    }
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: 25,
+      height: 25,
+      placeholder: (context, url) => Image.asset(
+        'assets/images/football-load.gif',
+        width: 25,
+        height: 25,
+      ),
+      errorWidget: (context, url, error) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          return loadImage(url); // Retry loading the image
+        } else {
+          return SizedBox(
+              width: 25,
+              height: 25); // Return an empty SizedBox after max retries
+        }
+      },
+    );
   }
 
-  // If failed to load SVG after max retries, return a CachedNetworkImage as a placeholder
-  completer.complete(
-    CachedNetworkImage(
-      imageUrl: url,
-      width: 30,
-      height: 30,
-      placeholder: (context, url) => Container(color: Colors.white, width: 30, height: 30,),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    ),
-  );
+  Widget loadLeagueImage(String url) {
+    int retryCount = 0;
+    const int maxRetries = 2;
 
-  return completer.future;
-}
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: 25,
+      height: 25,
+      placeholder: (context, url) => Image.asset(
+        'assets/images/football-load.gif',
+        width: 25,
+        height: 25,
+      ),
+      errorWidget: (context, url, error) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          return loadLeagueImage(url); // Retry loading the image
+        } else {
+          return SizedBox(
+              width: 25,
+              height: 25); // Return an empty SizedBox after max retries
+        }
+      },
+    );
+  }
+
+  String getCountryCodeFromUrl(String url) {
+    // Split the URL by '/' and get the last part
+    List<String> parts = url.split('/');
+    String lastPart = parts.last; // gr.svg
+
+    // Remove the '.svg' extension
+    String countryCode = lastPart.replaceAll('.svg', ''); // gr
+
+    // Capitalize the country code
+    countryCode = countryCode.toUpperCase(); // GR
+
+    return countryCode;
+  }
+
+  Future<Widget> loadSvgImage(String url) async {
+    int retryCount = 0;
+    const int maxRetries = 3;
+
+    Completer<Widget> completer = Completer();
+
+    while (retryCount < maxRetries) {
+      try {
+        final svgData = await http.get(Uri.parse(url));
+        if (svgData.statusCode == 200) {
+          final widget = SvgPicture.string(
+            svgData.body,
+            width: 30,
+            height: 30,
+          );
+          completer.complete(widget);
+          return widget;
+        }
+      } catch (e) {
+        retryCount++;
+      }
+    }
+
+    // If failed to load SVG after max retries, return a CachedNetworkImage as a placeholder
+    completer.complete(
+      CachedNetworkImage(
+        imageUrl: url,
+        width: 30,
+        height: 30,
+        placeholder: (context, url) => Container(
+          color: Colors.white,
+          width: 30,
+          height: 30,
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
+    );
+
+    return completer.future;
+  }
 
   @override
   Widget build(BuildContext context) {
     final fixturesForLeague = leagueData
         .where((fixture) => fixture['league']['id'] == leagueId)
         .toList();
-    
+
     if (fixturesForLeague.isEmpty) {
-      return Center(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  flag == 'null'
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                                color: Colors.white, child: loadLeagueImage(logo)),
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            Expanded(
-                              child: Text(leagueName,
+      return Container(
+        decoration:
+            BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade700,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    flag == 'null'
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                  color: Colors.white,
+                                  child: loadLeagueImage(logo)),
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                              Expanded(
+                                child: Text(leagueName,
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      color: Colors.white,
+                                    ),
+                                    softWrap: true,
+                                    textAlign: TextAlign.center),
+                              ),
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                              Container(
+                                  color: Colors.white,
+                                  child: loadLeagueImage(logo)),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                  color: Colors.white,
+                                  child: loadLeagueImage(logo)),
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  leagueName,
                                   style: TextStyle(
                                     fontSize: 24.0,
                                     color: Colors.white,
                                   ),
                                   softWrap: true,
-                                  textAlign: TextAlign.center),
-                            ),
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            Container(
-                                color: Colors.white, child: loadLeagueImage(logo)),
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                                color: Colors.white, child: loadLeagueImage(logo)),
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            Expanded(
-                              child: Text(
-                                leagueName,
-                                style: TextStyle(
-                                  fontSize: 24.0,
-                                  color: Colors.white,
+                                  textAlign: TextAlign.center,
                                 ),
-                                softWrap: true,
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            FutureBuilder<Widget>(
-                              future: loadSvgImage(flag),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  return snapshot.data ??
-                                      const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
-                                } else {
-                                  return const SizedBox(); // Return an empty SizedBox while loading
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    'No fixtures today.',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                              FutureBuilder<Widget>(
+                                future: loadSvgImage(flag),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return snapshot.data ??
+                                        const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
+                                  } else {
+                                    return const SizedBox(); // Return an empty SizedBox while loading
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      'No fixtures today.',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
@@ -241,7 +263,8 @@ String getCountryCodeFromUrl(String url) {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(color: Colors.white, child: loadLeagueImage(logo)),
+                      Container(
+                          color: Colors.white, child: loadLeagueImage(logo)),
                       SizedBox(
                         width: 16.0,
                       ),
@@ -257,65 +280,74 @@ String getCountryCodeFromUrl(String url) {
                       SizedBox(
                         width: 16.0,
                       ),
-                      Container(color: Colors.white, child: loadLeagueImage(logo)),
+                      Container(
+                          color: Colors.white, child: loadLeagueImage(logo)),
                     ],
                   )
-                :
-                leagueName == 'Cup' 
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(color: Colors.white, child: loadLeagueImage(logo)),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Expanded(
-                        child: Text('$leagueName ($country)',
-                            style: TextStyle(
-                              fontSize: 24.0,
+                : leagueName == 'Cup'
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
                               color: Colors.white,
-                            ),
-                            softWrap: true,
-                            textAlign: TextAlign.center),
-                      ),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      FutureBuilder<Widget>(
-                        future: loadSvgImage(flag),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return snapshot.data ??
-                                const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
-                          } else {
-                            return const SizedBox(); // Return an empty SizedBox while loading
-                          }
-                        },
-                      ),
-                    ],
-                  ) :Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(color: Colors.white, child: loadLeagueImage(logo)),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Expanded(
-                        child: Text(leagueName,
-                            style: TextStyle(
-                              fontSize: 24.0,
+                              child: loadLeagueImage(logo)),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Expanded(
+                            child: Text('$leagueName ($country)',
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.white,
+                                ),
+                                softWrap: true,
+                                textAlign: TextAlign.center),
+                          ),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          FutureBuilder<Widget>(
+                            future: loadSvgImage(flag),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return snapshot.data ??
+                                    const SizedBox(); // Use the loaded SVG or return an empty SizedBox if failed
+                              } else {
+                                return const SizedBox(); // Return an empty SizedBox while loading
+                              }
+                            },
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
                               color: Colors.white,
-                            ),
-                            softWrap: true,
-                            textAlign: TextAlign.center),
+                              child: loadLeagueImage(logo)),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Expanded(
+                            child: Text(leagueName,
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.white,
+                                ),
+                                softWrap: true,
+                                textAlign: TextAlign.center),
+                          ),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Image.asset(
+                            'assets/images/${getCountryCodeFromUrl(flag)}.png',
+                            height: 30,
+                            width: 30,
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Image.asset('assets/images/${getCountryCodeFromUrl(flag)}.png', height: 30, width: 30,)
-                    ],
-                  ),
             const SizedBox(height: 8.0),
             SizedBox(
               child: Table(

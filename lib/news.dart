@@ -13,6 +13,7 @@ class News extends StatefulWidget {
 
 class _NewsState extends State<News> {
   List<Map<String, dynamic>> articles = [];
+  String selectedCountry = 'gb';
 
   @override
   void initState() {
@@ -24,7 +25,7 @@ class _NewsState extends State<News> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://newsapi.org/v2/top-headlines?country=gb&category=sports&apiKey=3cba5fc4b71e42d497f667b3b8c75a41'),
+            'https://newsapi.org/v2/top-headlines?country=$selectedCountry&category=sports&apiKey=3cba5fc4b71e42d497f667b3b8c75a41'),
       );
 
       if (response.statusCode == 200) {
@@ -60,10 +61,504 @@ class _NewsState extends State<News> {
           'News',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 32, fontWeight: FontWeight.normal, color: Colors.white),
+            fontSize: 32,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: Colors.grey.shade700,
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DropdownButton<String>(
+              value: selectedCountry,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedCountry =
+                      newValue ?? 'gb'; // Default to Great Britain if null
+                  fetchNews();
+                });
+              },
+              items: const [
+                DropdownMenuItem<String>(
+                  value: 'ar',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Argentina',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'au',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Australia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'at',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Austria',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'be',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Belgium',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'br',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Brazil',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'bg',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Bulgaria',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ca',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Canada',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'cn',
+                  child: Row(
+                    children: [
+                      Text(
+                        'China',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'co',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Colombia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'cu',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Cuba',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'cz',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Czech Republic',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'eg',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Egypt',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'fr',
+                  child: Row(
+                    children: [
+                      Text(
+                        'France',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'de',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Germany',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'gb',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Great Britain',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'gr',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Greece',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'hk',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Hong Kong',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'hu',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Hungary',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'in',
+                  child: Row(
+                    children: [
+                      Text(
+                        'India',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'id',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Indonesia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ie',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Ireland',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'il',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Israel',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'it',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Italy',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'jp',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Japan',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'lv',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Latvia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'lt',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Lithuania',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'my',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Malaysia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'mx',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Mexico',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ma',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Morocco',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'nl',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Netherlands',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'nz',
+                  child: Row(
+                    children: [
+                      Text(
+                        'New Zealand',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ng',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Nigeria',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'no',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Norway',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ph',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Philippines',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'pl',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Poland',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'pt',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Portugal',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ro',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Romania',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'ru',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Russia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'sa',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Saudi Arabia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'rs',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Serbia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'sg',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Singapore',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'sk',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Slovakia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'si',
+                  child: Row(
+                    children: [
+                      Text(
+                        'Slovenia',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              dropdownColor: const Color(0xFF333333),
+            ),
+          ),
+        ],
       ),
       body: RefreshIndicator(
         color: Colors.white,
@@ -105,8 +600,10 @@ class NewsItem extends StatelessWidget {
             Container(
               height: 30,
               width: 30,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: const Color(0xFF333333),),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color(0xFF333333),
+              ),
               child: Text(
                 indexToShow.toString(),
                 style: TextStyle(color: Colors.white, fontSize: 20),

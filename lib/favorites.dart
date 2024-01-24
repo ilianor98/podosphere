@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:podosphere/favorite_league_widget.dart';
 import 'package:podosphere/favorite_team_widget.dart';
 import 'package:podosphere/team_profile_search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,13 +23,6 @@ class _FavoritesState extends State<Favorites> {
     super.initState();
     _loadSavedLeagueIds();
     _loadSavedTeamIds();
-  }
-
-  Future<void> _loadSavedLeagueIds() async {
-    final savedIds = await FavoritesManager.getFavoriteLeagueIds();
-    setState(() {
-      _savedLeagueIds = savedIds;
-    });
   }
 
   Future<void> _addToFavorites() async {
@@ -235,6 +229,8 @@ class _FavoritesState extends State<Favorites> {
               itemBuilder: (BuildContext context, int index) {
                 final leagueName = leagues[index]['league']['name'];
                 final leagueLogo = leagues[index]['league']['logo'];
+                final leagueId = leagues[index]['league']['id'];
+
                 return ListTile(
                   title: Row(
                     children: [
@@ -243,8 +239,9 @@ class _FavoritesState extends State<Favorites> {
                     ],
                   ),
                   onTap: () {
-                    // Handle tap on the searched league
-                    Navigator.pop(context);
+                    // Add league to favorites on tap
+                    FavoritesManager.addToFavoriteLeagues(leagueId.toString());
+                    Navigator.pop(context); // Close the dialog
                   },
                 );
               },
@@ -262,6 +259,18 @@ class _FavoritesState extends State<Favorites> {
     });
   }
 
+  Future<void> _loadSavedLeagueIds() async {
+    final savedIds = await FavoritesManager.getFavoriteLeagueIds();
+    setState(() {
+      _savedLeagueIds = savedIds;
+    });
+  }
+
+  Future<void> _refreshData() async {
+    await _loadSavedLeagueIds();
+    _loadSavedTeamIds();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -276,81 +285,110 @@ class _FavoritesState extends State<Favorites> {
         actions: [
           IconButton(
             onPressed: _showSearchDialog,
-            icon: const Icon(Icons.search_sharp),
+            icon: const Icon(
+              Icons.search_sharp,
+              color: Colors.white,
+            ),
           )
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade700,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Column(
-              children: [
-                Column(
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade700,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
                   children: [
-                    const Text(
-                      'Favorite teams',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (_savedTeamIds.isEmpty)
-                      const Expanded(
-                        child: Text(
-                          'No favorite teams',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                    Column(
+                      children: [
+                        const Text(
+                          'Favorite teams',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
-                      )
-                    else
-                      Column(
-                        children: _savedTeamIds.map((teamId) {
-                          return FavTeamWidget(
-                            key: Key(teamId),
-                            teamId: teamId,
-                            onRemove: () {
-                              // Remove from favorites and update state
-                              _removeFromFavorites(teamId);
-                            },
-                          );
-                        }).toList(),
-                      )
+                        if (_savedTeamIds.isEmpty)
+                          GestureDetector(
+                            onTap: _showSearchDialog,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF333333),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                heightFactor: 3,
+                                child: const Text(
+                                  'Add favorite teams',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          Column(
+                            children: _savedTeamIds.map((teamId) {
+                              return FavTeamWidget(
+                                key: Key(teamId),
+                                teamId: teamId,
+                              );
+                            }).toList(),
+                          )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        const Text(
+                          'Favorite Leagues',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        if (_savedLeagueIds.isEmpty)
+                          GestureDetector(
+                            onTap: _showSearchDialog,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF333333),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                heightFactor: 3,
+                                child: const Text(
+                                  'Add favorite leagues',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          Column(
+                            children: _savedLeagueIds.map((leagueId) {
+                              return FavLeagueWidget(
+                                leagueId: leagueId,
+                              );
+                            }).toList(),
+                          )
+                      ],
+                    )
                   ],
                 ),
-                const Column(
-                  children: [
-                    Text(
-                      'Favorite Leagues',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      'test1',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      'test2',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                )
-              ],
+              ),
             ),
           ),
         ),
       ),
     );
-  }
-
-  // Function to remove a team from favorites and update state
-  Future<void> _removeFromFavorites(String teamId) async {
-    await FavoritesManager.removeFromFavoriteTeams(teamId);
-    await _loadSavedTeamIds(); // Refresh saved team IDs after removal
   }
 }
 

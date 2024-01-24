@@ -10,14 +10,12 @@ class TeamProfileSearch extends StatefulWidget {
   final int teamId;
   final String logo;
   final String teamName;
-  final VoidCallback? onRemove;
 
   const TeamProfileSearch({
     super.key,
     required this.teamId,
     required this.logo,
     required this.teamName,
-    this.onRemove,
   });
 
   @override
@@ -26,13 +24,11 @@ class TeamProfileSearch extends StatefulWidget {
 
 class _TeamProfileSearchState extends State<TeamProfileSearch> {
   List<Map<String, dynamic>> profile = [];
-  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     fetchTeamProfile();
-    checkFavoriteStatus();
   }
 
   Future<void> fetchTeamProfile() async {
@@ -67,18 +63,6 @@ class _TeamProfileSearchState extends State<TeamProfileSearch> {
     }
   }
 
-  Future<void> checkFavoriteStatus() async {
-    final teamIdString = widget.teamId.toString();
-    isFavorite = await FavoritesManager.isTeamInFavorites(teamIdString);
-    setState(() {});
-  }
-
-  void updateFavoriteStatus(bool newStatus) {
-    setState(() {
-      isFavorite = newStatus;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -92,7 +76,6 @@ class _TeamProfileSearchState extends State<TeamProfileSearch> {
             children: [
               FavoriteButton(
                 teamId: widget.teamId,
-                onRemove: widget.onRemove,
               ),
               SizedBox(
                 height: 15,
@@ -137,10 +120,11 @@ class _TeamProfileSearchState extends State<TeamProfileSearch> {
 
 class FavoriteButton extends StatefulWidget {
   final int teamId;
-  final VoidCallback? onRemove; // Add onRemove callback
 
-  const FavoriteButton({Key? key, required this.teamId, this.onRemove})
-      : super(key: key);
+  const FavoriteButton({
+    Key? key,
+    required this.teamId,
+  }) : super(key: key);
 
   @override
   _FavoriteButtonState createState() => _FavoriteButtonState();
@@ -148,7 +132,6 @@ class FavoriteButton extends StatefulWidget {
 
 class _FavoriteButtonState extends State<FavoriteButton> {
   bool isFavorite = false;
-
   @override
   void initState() {
     super.initState();
@@ -166,16 +149,32 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     return GestureDetector(
       onTap: () async {
         final teamIdString = widget.teamId.toString();
-
         if (isFavorite) {
           await FavoritesManager.removeFromFavoriteTeams(teamIdString);
           setState(() {
             isFavorite = false;
           });
-
-          if (widget.onRemove != null) {
-            widget.onRemove!(); // Invoke onRemove callback after removal
-          }
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Team removed from favorites'),
+              );
+            },
+          );
+        } else {
+          await FavoritesManager.addToFavoriteTeams(teamIdString);
+          setState(() {
+            isFavorite = true;
+          });
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Team added to favorites'),
+              );
+            },
+          );
         }
       },
       child: Container(

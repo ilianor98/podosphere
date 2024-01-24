@@ -63,7 +63,7 @@ class _StandingsState extends State<Standings> {
       appBar: AppBar(
         backgroundColor: Colors.grey.shade700, // Dark mode background color
         title:
-            Text('${widget.champName}', style: TextStyle(color: Colors.white)),
+            Text(widget.champName, style: const TextStyle(color: Colors.white)),
         centerTitle: true, // Center-align the title
       ),
       body: Padding(
@@ -76,7 +76,7 @@ class _StandingsState extends State<Standings> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
@@ -237,8 +237,8 @@ class StandingsItem extends StatelessWidget {
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Text(
-                    '${rank}',
-                    style: TextStyle(color: Colors.white),
+                    '$rank',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 Flexible(
@@ -246,31 +246,31 @@ class StandingsItem extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: loadImage(logo),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Flexible(
                   flex: 6,
                   fit: FlexFit.tight,
                   child: Text(
-                    '${teamName}',
-                    style: TextStyle(color: Colors.white),
+                    '$teamName',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Text(
-                    '${gamesPlayed}',
-                    style: TextStyle(color: Colors.white),
+                    '$gamesPlayed',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Text(
-                    '${gamesWon}',
-                    style: TextStyle(color: Colors.white),
+                    '$gamesWon',
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -278,8 +278,8 @@ class StandingsItem extends StatelessWidget {
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Text(
-                    '${gamesDraw}',
-                    style: TextStyle(color: Colors.white),
+                    '$gamesDraw',
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -287,8 +287,8 @@ class StandingsItem extends StatelessWidget {
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Text(
-                    '${gamesLost}',
-                    style: TextStyle(color: Colors.white),
+                    '$gamesLost',
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -296,7 +296,7 @@ class StandingsItem extends StatelessWidget {
             ),
             trailing: Text(
               '$points',
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.bold),
@@ -307,12 +307,12 @@ class StandingsItem extends StatelessWidget {
                 children: [
                   Text(
                     'GF: $goalsFor - GA: $goalsAgainst',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   const SizedBox(width: 10), // Adjust spacing if needed
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Form: ',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -338,7 +338,7 @@ class FormDisplay extends StatelessWidget {
     if (result == 'W') {
       return const Color.fromARGB(255, 18, 107, 21);
     } else if (result == 'L') {
-      return Color.fromARGB(255, 197, 27, 15);
+      return const Color.fromARGB(255, 197, 27, 15);
     } else if (result == 'D') {
       return const Color.fromARGB(255, 179, 164, 30);
     } else {
@@ -367,8 +367,8 @@ class FormDisplay extends StatelessWidget {
             child: Center(
               child: Text(
                 result,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w400),
               ),
             ),
           ),
